@@ -1,0 +1,2690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FVL Portal — Backhaul Direct Finished Vehicle Logistics</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --c-bg: #f5f4f0;
+  --c-surface: #ffffff;
+  --c-border: #e2e0d8;
+  --c-border-strong: #c8c4b8;
+  --c-text: #1a1917;
+  --c-text-secondary: #6b6760;
+  --c-text-muted: #9b9890;
+  --c-accent: #1d4ed8;
+  --c-accent-light: #eff3ff;
+  --c-accent-hover: #1a44c2;
+  --c-success: #15803d;
+  --c-success-bg: #f0fdf4;
+  --c-warning: #b45309;
+  --c-warning-bg: #fffbeb;
+  --c-danger: #dc2626;
+  --c-danger-bg: #fef2f2;
+  --c-orange: #c2410c;
+  --c-orange-bg: #fff7ed;
+  --c-purple: #7c3aed;
+  --c-purple-bg: #f5f3ff;
+  --c-nav-width: 240px;
+  --c-header-height: 56px;
+  --radius: 6px;
+  --radius-lg: 10px;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.10);
+  --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'IBM Plex Sans',sans-serif;background:var(--c-bg);color:var(--c-text);font-size:14px;line-height:1.5;overflow:hidden;height:100vh}
+/* ── GLOBAL LAYOUT ── */
+#app{display:flex;height:100vh;overflow:hidden}
+#sidebar{width:var(--c-nav-width);background:var(--c-surface);border-right:1px solid var(--c-border);display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto;z-index:100}
+#main{flex:1;display:flex;flex-direction:column;min-width:0;overflow:hidden}
+#topbar{height:var(--c-header-height);background:var(--c-surface);border-bottom:1px solid var(--c-border);display:flex;align-items:center;padding:0 20px;gap:12px;flex-shrink:0;z-index:50}
+#content{flex:1;overflow-y:auto;padding:24px}
+/* ── SIDEBAR ── */
+.sb-logo{padding:16px 16px 12px;border-bottom:1px solid var(--c-border);display:flex;align-items:center;gap:10px}
+.sb-logo-mark{width:32px;height:32px;background:#1a1917;border-radius:6px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:13px;letter-spacing:-0.5px;flex-shrink:0}
+.sb-logo-text{font-size:12px;font-weight:600;color:var(--c-text);line-height:1.3}
+.sb-logo-sub{font-size:10px;color:var(--c-text-muted);font-weight:400}
+.sb-account{padding:10px 12px;margin:8px;background:var(--c-bg);border-radius:var(--radius);cursor:pointer;border:1px solid var(--c-border)}
+.sb-account-label{font-size:10px;color:var(--c-text-muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px}
+.sb-account-name{font-size:12px;font-weight:600;color:var(--c-text);display:flex;align-items:center;justify-content:space-between}
+.sb-account-role{font-size:10px;color:var(--c-accent);font-weight:500}
+.sb-nav{flex:1;padding:8px 8px}
+.sb-nav-section{margin-bottom:4px}
+.sb-nav-section-label{font-size:10px;font-weight:600;color:var(--c-text-muted);text-transform:uppercase;letter-spacing:0.8px;padding:6px 8px 4px}
+.sb-nav-item{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:var(--radius);cursor:pointer;color:var(--c-text-secondary);font-size:13px;font-weight:500;transition:all 0.15s;position:relative}
+.sb-nav-item:hover{background:var(--c-bg);color:var(--c-text)}
+.sb-nav-item.active{background:var(--c-accent-light);color:var(--c-accent);font-weight:600}
+.sb-nav-item .nav-icon{width:16px;height:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sb-nav-badge{margin-left:auto;background:var(--c-danger);color:#fff;font-size:10px;font-weight:700;padding:1px 5px;border-radius:10px;min-width:18px;text-align:center}
+.sb-nav-badge.warn{background:var(--c-warning)}
+.sb-nav-badge.info{background:var(--c-accent)}
+.sb-footer{padding:12px;border-top:1px solid var(--c-border);font-size:11px;color:var(--c-text-muted)}
+/* ── TOPBAR ── */
+.tb-search{flex:1;max-width:440px;position:relative}
+.tb-search input{width:100%;height:34px;background:var(--c-bg);border:1px solid var(--c-border);border-radius:var(--radius);padding:0 12px 0 34px;font-size:13px;font-family:inherit;color:var(--c-text);outline:none;transition:border 0.15s}
+.tb-search input:focus{border-color:var(--c-accent);background:#fff}
+.tb-search-icon{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--c-text-muted);pointer-events:none}
+.tb-search-hint{position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:10px;color:var(--c-text-muted);background:var(--c-border);padding:1px 5px;border-radius:3px;font-family:'IBM Plex Mono',monospace}
+.tb-spacer{flex:1}
+.tb-btn{display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:var(--radius);border:1px solid var(--c-border);background:var(--c-surface);cursor:pointer;color:var(--c-text-secondary);transition:all 0.15s;position:relative}
+.tb-btn:hover{background:var(--c-bg);color:var(--c-text)}
+.tb-notif-dot{position:absolute;top:7px;right:7px;width:7px;height:7px;background:var(--c-danger);border-radius:50%;border:1.5px solid #fff}
+.tb-user{display:flex;align-items:center;gap:8px;padding:0 8px;height:34px;border-radius:var(--radius);border:1px solid var(--c-border);background:var(--c-surface);cursor:pointer;transition:all 0.15s}
+.tb-user:hover{background:var(--c-bg)}
+.tb-user-av{width:24px;height:24px;border-radius:50%;background:#1a1917;color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.tb-user-name{font-size:12px;font-weight:600;color:var(--c-text)}
+.tb-role-badge{font-size:10px;background:var(--c-accent-light);color:var(--c-accent);padding:2px 6px;border-radius:3px;font-weight:600}
+/* ── PAGES ── */
+.page{display:none}
+.page.active{display:block}
+/* ── COMMON COMPONENTS ── */
+.page-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px;gap:16px}
+.page-title{font-size:20px;font-weight:700;color:var(--c-text);letter-spacing:-0.3px}
+.page-subtitle{font-size:13px;color:var(--c-text-secondary);margin-top:2px}
+.page-actions{display:flex;gap:8px;flex-shrink:0;align-items:center}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:0 14px;height:34px;border-radius:var(--radius);font-size:13px;font-weight:500;cursor:pointer;border:none;transition:all 0.15s;font-family:inherit;white-space:nowrap}
+.btn-primary{background:var(--c-accent);color:#fff}
+.btn-primary:hover{background:var(--c-accent-hover)}
+.btn-secondary{background:var(--c-surface);color:var(--c-text);border:1px solid var(--c-border)}
+.btn-secondary:hover{background:var(--c-bg)}
+.btn-danger{background:var(--c-danger);color:#fff}
+.btn-danger:hover{background:#b91c1c}
+.btn-ghost{background:transparent;color:var(--c-text-secondary);border:none;padding:0 8px}
+.btn-ghost:hover{color:var(--c-text);background:var(--c-bg)}
+.btn-sm{height:28px;padding:0 10px;font-size:12px}
+.btn-xs{height:24px;padding:0 8px;font-size:11px}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;margin-bottom:24px}
+.kpi-card{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--radius-lg);padding:16px 18px;cursor:pointer;transition:all 0.15s}
+.kpi-card:hover{border-color:var(--c-accent);box-shadow:var(--shadow-sm)}
+.kpi-label{font-size:11px;font-weight:600;color:var(--c-text-muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px}
+.kpi-value{font-size:28px;font-weight:700;color:var(--c-text);letter-spacing:-1px;line-height:1;font-family:'IBM Plex Mono',monospace}
+.kpi-sub{font-size:12px;color:var(--c-text-muted);margin-top:4px;display:flex;align-items:center;gap:4px}
+.kpi-delta-up{color:var(--c-success);font-weight:600}
+.kpi-delta-down{color:var(--c-danger);font-weight:600}
+.kpi-delta-neutral{color:var(--c-text-muted)}
+.kpi-card.accent{border-left:3px solid var(--c-accent)}
+.kpi-card.success{border-left:3px solid var(--c-success)}
+.kpi-card.warning{border-left:3px solid var(--c-warning)}
+.kpi-card.danger{border-left:3px solid var(--c-danger)}
+.kpi-card.purple{border-left:3px solid var(--c-purple)}
+.section-card{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--radius-lg);margin-bottom:20px;overflow:hidden}
+.section-card-header{padding:14px 18px;border-bottom:1px solid var(--c-border);display:flex;align-items:center;justify-content:space-between}
+.section-card-title{font-size:13px;font-weight:700;color:var(--c-text)}
+.section-card-body{padding:0}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+th{font-size:11px;font-weight:600;color:var(--c-text-muted);text-transform:uppercase;letter-spacing:0.5px;padding:10px 16px;text-align:left;border-bottom:1px solid var(--c-border);background:var(--c-bg);white-space:nowrap}
+td{padding:11px 16px;border-bottom:1px solid var(--c-border);font-size:13px;color:var(--c-text);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr.clickable{cursor:pointer}
+tr.clickable:hover td{background:#fafaf8}
+.badge{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;white-space:nowrap}
+.badge-success{background:var(--c-success-bg);color:var(--c-success)}
+.badge-warning{background:var(--c-warning-bg);color:var(--c-warning)}
+.badge-danger{background:var(--c-danger-bg);color:var(--c-danger)}
+.badge-info{background:var(--c-accent-light);color:var(--c-accent)}
+.badge-neutral{background:var(--c-bg);color:var(--c-text-secondary);border:1px solid var(--c-border)}
+.badge-purple{background:var(--c-purple-bg);color:var(--c-purple)}
+.badge-orange{background:var(--c-orange-bg);color:var(--c-orange)}
+.badge-dot::before{content:'';display:inline-block;width:6px;height:6px;border-radius:50%;background:currentColor}
+.filter-bar{display:flex;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid var(--c-border);background:var(--c-bg);flex-wrap:wrap}
+.filter-select{height:30px;padding:0 8px;border:1px solid var(--c-border);border-radius:var(--radius);background:var(--c-surface);font-size:12px;font-family:inherit;color:var(--c-text);cursor:pointer;outline:none}
+.filter-select:focus{border-color:var(--c-accent)}
+.filter-input{height:30px;padding:0 8px;border:1px solid var(--c-border);border-radius:var(--radius);background:var(--c-surface);font-size:12px;font-family:inherit;color:var(--c-text);outline:none;width:180px}
+.filter-input:focus{border-color:var(--c-accent)}
+.filter-label{font-size:11px;font-weight:600;color:var(--c-text-muted)}
+.filter-spacer{flex:1}
+.mono{font-family:'IBM Plex Mono',monospace;font-size:12px}
+.text-muted{color:var(--c-text-muted)}
+.text-secondary{color:var(--c-text-secondary)}
+.text-accent{color:var(--c-accent)}
+.text-success{color:var(--c-success)}
+.text-danger{color:var(--c-danger)}
+.text-warning{color:var(--c-warning)}
+/* ── TABS ── */
+.tab-bar{display:flex;border-bottom:1px solid var(--c-border);padding:0 18px;background:var(--c-surface)}
+.tab-item{padding:12px 14px;font-size:13px;font-weight:500;color:var(--c-text-secondary);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all 0.15s;white-space:nowrap}
+.tab-item:hover{color:var(--c-text)}
+.tab-item.active{color:var(--c-accent);border-bottom-color:var(--c-accent);font-weight:600}
+.tab-content{display:none;padding:20px 18px}
+.tab-content.active{display:block}
+/* ── FORMS ── */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.form-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+.form-group{display:flex;flex-direction:column;gap:5px}
+.form-group.full{grid-column:1/-1}
+.form-label{font-size:12px;font-weight:600;color:var(--c-text-secondary)}
+.form-label .req{color:var(--c-danger)}
+.form-input{height:34px;padding:0 10px;border:1px solid var(--c-border);border-radius:var(--radius);font-size:13px;font-family:inherit;color:var(--c-text);background:var(--c-surface);outline:none;transition:border 0.15s}
+.form-input:focus{border-color:var(--c-accent);box-shadow:0 0 0 2px rgba(29,78,216,0.1)}
+.form-select{height:34px;padding:0 10px;border:1px solid var(--c-border);border-radius:var(--radius);font-size:13px;font-family:inherit;color:var(--c-text);background:var(--c-surface);outline:none;cursor:pointer}
+.form-select:focus{border-color:var(--c-accent)}
+.form-textarea{padding:8px 10px;border:1px solid var(--c-border);border-radius:var(--radius);font-size:13px;font-family:inherit;color:var(--c-text);background:var(--c-surface);outline:none;resize:vertical;min-height:80px;transition:border 0.15s}
+.form-textarea:focus{border-color:var(--c-accent)}
+.form-hint{font-size:11px;color:var(--c-text-muted)}
+/* ── MODAL ── */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.35);z-index:1000;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.open{display:flex}
+.modal{background:var(--c-surface);border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);width:100%;max-width:640px;max-height:90vh;display:flex;flex-direction:column;overflow:hidden}
+.modal-lg{max-width:860px}
+.modal-xl{max-width:1100px}
+.modal-header{padding:18px 20px;border-bottom:1px solid var(--c-border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.modal-title{font-size:15px;font-weight:700}
+.modal-body{padding:20px;overflow-y:auto;flex:1}
+.modal-footer{padding:14px 20px;border-top:1px solid var(--c-border);display:flex;justify-content:flex-end;gap:8px;flex-shrink:0}
+.modal-close{width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:var(--radius);cursor:pointer;color:var(--c-text-muted);background:none;border:none;font-size:16px;transition:all 0.15s}
+.modal-close:hover{background:var(--c-bg);color:var(--c-text)}
+/* ── TIMELINE ── */
+.timeline{position:relative;padding-left:24px}
+.timeline::before{content:'';position:absolute;left:7px;top:8px;bottom:8px;width:2px;background:var(--c-border)}
+.tl-item{position:relative;margin-bottom:20px}
+.tl-dot{position:absolute;left:-24px;top:3px;width:14px;height:14px;border-radius:50%;border:2px solid var(--c-surface);background:var(--c-border-strong);box-shadow:0 0 0 2px var(--c-border)}
+.tl-dot.delivered{background:var(--c-success)}
+.tl-dot.active{background:var(--c-accent)}
+.tl-dot.damage{background:var(--c-danger)}
+.tl-dot.warning{background:var(--c-warning)}
+.tl-time{font-size:11px;color:var(--c-text-muted);font-family:'IBM Plex Mono',monospace;margin-bottom:3px}
+.tl-title{font-size:13px;font-weight:600;color:var(--c-text);margin-bottom:2px}
+.tl-detail{font-size:12px;color:var(--c-text-secondary)}
+.tl-party{font-size:11px;color:var(--c-text-muted);margin-top:3px;display:flex;align-items:center;gap:4px}
+/* ── DAMAGE WIZARD ── */
+.dmg-steps{display:flex;gap:0;margin-bottom:20px;border-bottom:1px solid var(--c-border)}
+.dmg-step{padding:10px 16px;font-size:12px;font-weight:600;color:var(--c-text-muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;display:flex;align-items:center;gap:6px}
+.dmg-step.active{color:var(--c-accent);border-bottom-color:var(--c-accent)}
+.dmg-step.done{color:var(--c-success)}
+.dmg-step-num{width:18px;height:18px;border-radius:50%;background:var(--c-border);display:flex;align-items:center;justify-content:center;font-size:10px}
+.dmg-step.active .dmg-step-num{background:var(--c-accent);color:#fff}
+.dmg-step.done .dmg-step-num{background:var(--c-success);color:#fff}
+.vehicle-diagram{position:relative;width:100%;max-width:500px;margin:0 auto;background:var(--c-bg);border:1px solid var(--c-border);border-radius:var(--radius-lg);padding:20px;cursor:crosshair}
+.veh-svg{width:100%;height:auto}
+.veh-zone{cursor:pointer;transition:all 0.15s;fill:transparent;stroke:var(--c-border-strong);stroke-width:1}
+.veh-zone:hover{fill:rgba(29,78,216,0.1);stroke:var(--c-accent)}
+.veh-zone.selected{fill:rgba(29,78,216,0.15);stroke:var(--c-accent);stroke-width:2}
+.veh-zone.damaged{fill:rgba(220,38,38,0.15);stroke:var(--c-danger);stroke-width:2}
+.dmg-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.dmg-chip{padding:8px 10px;border:1px solid var(--c-border);border-radius:var(--radius);cursor:pointer;font-size:12px;font-weight:500;text-align:center;transition:all 0.15s;background:var(--c-surface)}
+.dmg-chip:hover{border-color:var(--c-accent);background:var(--c-accent-light);color:var(--c-accent)}
+.dmg-chip.selected{border-color:var(--c-accent);background:var(--c-accent-light);color:var(--c-accent);font-weight:600}
+.severity-bar{display:flex;gap:4px}
+.sev-level{flex:1;height:32px;border-radius:var(--radius);cursor:pointer;border:2px solid transparent;transition:all 0.15s;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600}
+.sev-level:hover{opacity:0.9}
+.sev-1{background:#dcfce7;color:#15803d}
+.sev-2{background:#fef9c3;color:#a16207}
+.sev-3{background:#fed7aa;color:#c2410c}
+.sev-4{background:#fee2e2;color:#dc2626}
+.sev-5{background:#fca5a5;color:#991b1b}
+.sev-level.selected{border-color:currentColor;box-shadow:0 0 0 2px rgba(0,0,0,0.15)}
+.aiag-code-preview{background:#1a1917;color:#4ade80;padding:12px 16px;border-radius:var(--radius);font-family:'IBM Plex Mono',monospace;font-size:14px;letter-spacing:1px;margin-top:12px}
+.aiag-code-label{font-size:10px;color:#6b7280;margin-bottom:4px}
+.completeness-bar{height:6px;background:var(--c-border);border-radius:3px;overflow:hidden;margin-top:4px}
+.completeness-fill{height:100%;background:var(--c-success);transition:width 0.3s}
+/* ── CLAIMS WORKFLOW ── */
+.claim-workflow{display:flex;align-items:center;gap:0;margin-bottom:16px;overflow-x:auto;padding-bottom:4px}
+.claim-stage{display:flex;align-items:center}
+.claim-stage-box{padding:6px 12px;font-size:11px;font-weight:600;border:1px solid var(--c-border);background:var(--c-surface);color:var(--c-text-secondary);white-space:nowrap;border-radius:2px;transition:all 0.15s;cursor:pointer}
+.claim-stage-box:hover{border-color:var(--c-accent-hover);color:var(--c-accent)}
+.claim-stage-box.active{background:var(--c-accent);color:#fff;border-color:var(--c-accent)}
+.claim-stage-box.done{background:var(--c-success-bg);color:var(--c-success);border-color:var(--c-success)}
+.claim-stage-arrow{color:var(--c-text-muted);font-size:12px;padding:0 4px}
+/* ── SPLAT CHART ZONES ── */
+.splat-container{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.zone-btn{padding:8px 12px;border:1.5px solid var(--c-border);border-radius:var(--radius);cursor:pointer;font-size:12px;font-weight:500;background:var(--c-surface);transition:all 0.15s;text-align:center}
+.zone-btn:hover{border-color:var(--c-accent);background:var(--c-accent-light);color:var(--c-accent)}
+.zone-btn.selected{border-color:var(--c-accent);background:var(--c-accent-light);color:var(--c-accent);font-weight:600}
+/* ── SLA TIMER ── */
+.sla-pill{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:10px;font-size:11px;font-weight:600}
+.sla-ok{background:#f0fdf4;color:#15803d}
+.sla-warn{background:#fffbeb;color:#b45309}
+.sla-breach{background:#fef2f2;color:#dc2626;animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.7}}
+/* ── TWO-COL DETAIL ── */
+.detail-layout{display:grid;grid-template-columns:1fr 340px;gap:20px}
+.detail-main{}
+.detail-sidebar{}
+.info-card{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--radius-lg);padding:16px;margin-bottom:16px}
+.info-card-title{font-size:12px;font-weight:700;color:var(--c-text-muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:12px}
+.info-row{display:flex;justify-content:space-between;align-items:flex-start;padding:5px 0;border-bottom:1px solid var(--c-border)}
+.info-row:last-child{border-bottom:none}
+.info-key{font-size:12px;color:var(--c-text-secondary);flex-shrink:0;margin-right:12px}
+.info-val{font-size:12px;font-weight:500;color:var(--c-text);text-align:right}
+/* ── CHARTS (CSS-only) ── */
+.bar-chart{display:flex;flex-direction:column;gap:8px;padding:16px 18px}
+.bar-row{display:flex;align-items:center;gap:10px}
+.bar-label{width:100px;font-size:11px;color:var(--c-text-secondary);text-align:right;flex-shrink:0}
+.bar-track{flex:1;height:20px;background:var(--c-bg);border-radius:3px;overflow:hidden;position:relative}
+.bar-fill{height:100%;border-radius:3px;transition:width 0.5s;display:flex;align-items:center;padding-left:8px;font-size:10px;font-weight:600;color:#fff;white-space:nowrap}
+.bar-val{font-size:11px;color:var(--c-text-secondary);width:40px;text-align:right;flex-shrink:0}
+.stat-row{display:flex;gap:16px;padding:16px 18px;flex-wrap:wrap}
+.stat-item{flex:1;min-width:100px}
+.stat-item-label{font-size:11px;color:var(--c-text-muted);margin-bottom:4px}
+.stat-item-value{font-size:20px;font-weight:700;font-family:'IBM Plex Mono',monospace;color:var(--c-text)}
+/* ── NOTIFICATION ── */
+.notif-item{display:flex;gap:10px;padding:12px 16px;border-bottom:1px solid var(--c-border);cursor:pointer;transition:background 0.15s}
+.notif-item:hover{background:var(--c-bg)}
+.notif-dot{width:8px;height:8px;border-radius:50%;margin-top:4px;flex-shrink:0}
+.notif-body{flex:1;min-width:0}
+.notif-title{font-size:12px;font-weight:600;color:var(--c-text)}
+.notif-sub{font-size:11px;color:var(--c-text-secondary);margin-top:1px}
+.notif-time{font-size:10px;color:var(--c-text-muted);white-space:nowrap;flex-shrink:0}
+/* ── UPLOAD DROP ── */
+.upload-zone{border:2px dashed var(--c-border);border-radius:var(--radius-lg);padding:24px;text-align:center;cursor:pointer;transition:all 0.15s;color:var(--c-text-muted);font-size:13px}
+.upload-zone:hover{border-color:var(--c-accent);background:var(--c-accent-light);color:var(--c-accent)}
+/* ── BREADCRUMB ── */
+.breadcrumb{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--c-text-muted);margin-bottom:16px}
+.breadcrumb a{color:var(--c-accent);cursor:pointer;text-decoration:none}
+.breadcrumb a:hover{text-decoration:underline}
+/* ── CHIP SELECT ── */
+.chip-select{display:flex;gap:6px;flex-wrap:wrap}
+.chip{padding:4px 10px;border:1px solid var(--c-border);border-radius:10px;font-size:12px;cursor:pointer;transition:all 0.15s;background:var(--c-surface)}
+.chip:hover{border-color:var(--c-accent)}
+.chip.selected{background:var(--c-accent);color:#fff;border-color:var(--c-accent)}
+/* ── AUDIT TRAIL ── */
+.audit-item{display:flex;gap:12px;padding:8px 0;border-bottom:1px solid var(--c-border)}
+.audit-item:last-child{border-bottom:none}
+.audit-time{font-size:10px;color:var(--c-text-muted);font-family:'IBM Plex Mono',monospace;white-space:nowrap;width:130px;flex-shrink:0;margin-top:1px}
+.audit-body{flex:1;min-width:0}
+.audit-action{font-size:12px;font-weight:500;color:var(--c-text)}
+.audit-user{font-size:11px;color:var(--c-text-secondary)}
+/* ── ROLE SWITCHER ── */
+.role-switch-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.role-card{padding:14px;border:2px solid var(--c-border);border-radius:var(--radius-lg);cursor:pointer;transition:all 0.15s;background:var(--c-surface)}
+.role-card:hover{border-color:var(--c-accent)}
+.role-card.selected{border-color:var(--c-accent);background:var(--c-accent-light)}
+.role-card-title{font-size:13px;font-weight:700;margin-bottom:3px}
+.role-card-desc{font-size:11px;color:var(--c-text-secondary)}
+/* ── EMPTY STATE ── */
+.empty-state{padding:48px 24px;text-align:center;color:var(--c-text-muted)}
+.empty-state-icon{font-size:32px;margin-bottom:12px}
+.empty-state-title{font-size:14px;font-weight:600;color:var(--c-text-secondary);margin-bottom:4px}
+.empty-state-desc{font-size:12px}
+/* ── DEALER SIMPLIFIED ── */
+.action-card{background:var(--c-surface);border:2px solid var(--c-border);border-radius:var(--radius-lg);padding:20px;cursor:pointer;transition:all 0.2s;text-align:center}
+.action-card:hover{border-color:var(--c-accent);transform:translateY(-2px);box-shadow:var(--shadow-md)}
+.action-card-icon{font-size:28px;margin-bottom:10px}
+.action-card-title{font-size:14px;font-weight:700;margin-bottom:4px}
+.action-card-desc{font-size:12px;color:var(--c-text-secondary)}
+.next-step-card{display:flex;gap:12px;align-items:flex-start;padding:14px 16px;background:var(--c-accent-light);border:1px solid #bfdbfe;border-radius:var(--radius-lg);margin-bottom:12px}
+.next-step-num{width:24px;height:24px;border-radius:50%;background:var(--c-accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+/* ── LOGIN ── */
+#login-page{display:flex;align-items:center;justify-content:center;height:100vh;background:var(--c-bg)}
+.login-box{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--radius-lg);padding:36px 40px;width:420px;box-shadow:var(--shadow-lg)}
+.login-logo{display:flex;align-items:center;gap:10px;margin-bottom:28px}
+.login-title{font-size:22px;font-weight:700;letter-spacing:-0.5px}
+.login-sub{font-size:13px;color:var(--c-text-secondary);margin-top:2px}
+/* ── ACCOUNT SWITCHER ── */
+.account-switcher{position:absolute;top:calc(var(--c-header-height) + 8px);right:60px;background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--radius-lg);padding:8px;min-width:260px;box-shadow:var(--shadow-lg);z-index:200;display:none}
+.account-switcher.open{display:block}
+.acct-item{padding:10px 12px;border-radius:var(--radius);cursor:pointer;transition:background 0.15s}
+.acct-item:hover{background:var(--c-bg)}
+.acct-item.active{background:var(--c-accent-light)}
+.acct-name{font-size:13px;font-weight:600}
+.acct-meta{font-size:11px;color:var(--c-text-muted)}
+/* ── TOOLTIP ── */
+[data-tip]{position:relative;cursor:help}
+[data-tip]::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 4px);left:50%;transform:translateX(-50%);background:#1a1917;color:#fff;font-size:11px;padding:4px 8px;border-radius:4px;white-space:nowrap;pointer-events:none;opacity:0;transition:opacity 0.15s;z-index:500}
+[data-tip]:hover::after{opacity:1}
+/* ── INTEGRATION STATUS ── */
+.integration-row{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--c-border)}
+.integration-row:last-child{border-bottom:none}
+.int-name{font-size:13px;font-weight:600}
+.int-status{display:flex;align-items:center;gap:6px;font-size:12px}
+.int-dot{width:8px;height:8px;border-radius:50%}
+.int-dot-green{background:var(--c-success)}
+.int-dot-gray{background:var(--c-text-muted)}
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--c-border-strong);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:var(--c-text-muted)}
+/* ── RESPONSIVE LAYOUT ── */
+@media(max-width:900px){
+  #sidebar{width:52px}
+  .sb-logo-text,.sb-logo-sub,.sb-nav-item span,.sb-account,.sb-nav-section-label,.sb-footer{display:none}
+  .sb-nav-item{padding:10px;justify-content:center}
+  .sb-nav-badge{display:none}
+  .sb-nav-item .nav-icon{width:20px;height:20px}
+  .detail-layout{grid-template-columns:1fr}
+  .kpi-grid{grid-template-columns:repeat(2,1fr)}
+  .form-grid{grid-template-columns:1fr}
+  .form-grid-3{grid-template-columns:1fr 1fr}
+}
+/* ── TOPBAR SEARCH DROPDOWN ── */
+.search-dropdown{display:none;position:absolute;top:calc(100% + 8px);left:0;right:0;background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);z-index:300;max-height:400px;overflow-y:auto}
+.search-dropdown.open{display:block}
+.sd-section{padding:8px 12px 4px;font-size:10px;font-weight:700;color:var(--c-text-muted);text-transform:uppercase;letter-spacing:0.5px;border-bottom:1px solid var(--c-border)}
+.sd-item{padding:8px 12px;cursor:pointer;display:flex;align-items:center;gap:10px;transition:background 0.1s}
+.sd-item:hover{background:var(--c-bg)}
+.sd-icon{font-size:14px;width:20px;text-align:center;flex-shrink:0}
+.sd-main{font-size:12px;font-weight:600}
+.sd-sub{font-size:11px;color:var(--c-text-muted)}
+/* ── EXPORT SCREEN ── */
+.packet-section{border:1px solid var(--c-border);border-radius:var(--radius-lg);margin-bottom:12px;overflow:hidden}
+.packet-section-hdr{padding:10px 14px;background:var(--c-bg);border-bottom:1px solid var(--c-border);display:flex;align-items:center;justify-content:space-between;font-size:12px;font-weight:700}
+.packet-section-body{padding:12px 14px;font-size:12px;color:var(--c-text-secondary);line-height:1.8}
+/* ── REPORT CHART ── */
+.donut-wrap{position:relative;width:120px;height:120px;flex-shrink:0}
+.donut-svg{width:100%;height:100%}
+.donut-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace}
+.donut-val{font-size:20px;font-weight:700}
+.donut-lbl{font-size:9px;color:var(--c-text-muted);text-transform:uppercase;letter-spacing:0.5px}
+</style>
+</head>
+<body>
+
+<!-- ╔═══════════════════════════════════════╗ -->
+<!-- ║          LOGIN PAGE                   ║ -->
+<!-- ╚═══════════════════════════════════════╝ -->
+<div id="login-page">
+  <div class="login-box">
+    <div class="login-logo">
+      <div class="sb-logo-mark">BD</div>
+      <div>
+        <div style="font-size:15px;font-weight:700;line-height:1.2">Backhaul Direct</div>
+        <div style="font-size:11px;color:var(--c-text-muted)">Finished Vehicle Logistics Portal</div>
+      </div>
+    </div>
+    <div class="login-title">Sign in</div>
+    <div class="login-sub">Enter your credentials or select a demo role below</div>
+    <div style="margin-top:20px;display:flex;flex-direction:column;gap:12px">
+      <div class="form-group">
+        <label class="form-label">Email address</label>
+        <input class="form-input" type="email" placeholder="you@company.com" value="demo@backhaulDirect.com">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input class="form-input" type="password" placeholder="••••••••" value="••••••••">
+      </div>
+    </div>
+    <div style="margin-top:16px;font-size:12px;font-weight:600;color:var(--c-text-muted);margin-bottom:8px">Or sign in as demo role:</div>
+    <div class="role-switch-grid">
+      <div class="role-card" onclick="loginAs('oem_admin')">
+        <div class="role-card-title" style="color:var(--c-accent)">OEM Admin</div>
+        <div class="role-card-desc">Ford Motor Co. — full KPIs, claims mgmt, multi-dealer</div>
+      </div>
+      <div class="role-card" onclick="loginAs('oem_analyst')">
+        <div class="role-card-title" style="color:var(--c-purple)">OEM Claims Analyst</div>
+        <div class="role-card-desc">Warranty team — strict AIAG code enforcement</div>
+      </div>
+      <div class="role-card" onclick="loginAs('dealer_admin')">
+        <div class="role-card-title" style="color:var(--c-success)">Dealer Admin</div>
+        <div class="role-card-desc">Garber Ford — simplified claim view</div>
+      </div>
+      <div class="role-card" onclick="loginAs('internal_ops')">
+        <div class="role-card-title" style="color:var(--c-warning)">Internal Ops</div>
+        <div class="role-card-desc">Backhaul Direct — all accounts, full access</div>
+      </div>
+    </div>
+    <button class="btn btn-primary" style="width:100%;justify-content:center;margin-top:16px" onclick="loginAs('oem_admin')">Sign in</button>
+    <div style="text-align:center;font-size:11px;color:var(--c-text-muted);margin-top:12px">Secured by Backhaul Direct SSO · v2.4.1</div>
+  </div>
+</div>
+
+<!-- ╔═══════════════════════════════════════╗ -->
+<!-- ║          MAIN APP                     ║ -->
+<!-- ╚═══════════════════════════════════════╝ -->
+<div id="app" style="display:none">
+  <!-- SIDEBAR -->
+  <div id="sidebar">
+    <div class="sb-logo">
+      <div class="sb-logo-mark">BD</div>
+      <div>
+        <div class="sb-logo-text">Backhaul Direct</div>
+        <div class="sb-logo-sub">FVL Portal</div>
+      </div>
+    </div>
+    <div class="sb-account" onclick="toggleAccountSwitcher()">
+      <div class="sb-account-label">Account</div>
+      <div class="sb-account-name" id="sb-acct-name">Ford Motor Co. <span>⌄</span></div>
+      <div class="sb-account-role" id="sb-acct-role">OEM Admin</div>
+    </div>
+    <div class="sb-nav">
+      <div class="sb-nav-section">
+        <div class="sb-nav-item active" onclick="nav('dashboard')">
+          <span class="nav-icon">⊞</span><span>Dashboard</span>
+        </div>
+        <div class="sb-nav-item" onclick="nav('vehicles')">
+          <span class="nav-icon">🚗</span><span>Vehicles / VINs</span>
+        </div>
+        <div class="sb-nav-item" onclick="nav('moves')">
+          <span class="nav-icon">↔</span><span>Moves / Shipments</span>
+        </div>
+        <div class="sb-nav-item" onclick="nav('claims')">
+          <span class="nav-icon">⚑</span><span>Claims</span>
+          <span class="sb-nav-badge" id="claims-badge">14</span>
+        </div>
+        <div class="sb-nav-item" onclick="nav('exceptions')">
+          <span class="nav-icon">⚠</span><span>Exceptions</span>
+          <span class="sb-nav-badge warn" id="exc-badge">7</span>
+        </div>
+      </div>
+      <div class="sb-nav-section">
+        <div class="sb-nav-section-label">Reporting</div>
+        <div class="sb-nav-item" onclick="nav('reports')">
+          <span class="nav-icon">📊</span><span>Reports</span>
+        </div>
+        <div class="sb-nav-item" onclick="nav('documents')">
+          <span class="nav-icon">📄</span><span>Documents</span>
+        </div>
+      </div>
+      <div class="sb-nav-section">
+        <div class="sb-nav-section-label">Configuration</div>
+        <div class="sb-nav-item" onclick="nav('admin')">
+          <span class="nav-icon">⚙</span><span>Admin / Settings</span>
+        </div>
+        <div class="sb-nav-item" onclick="nav('integrations')">
+          <span class="nav-icon">⇌</span><span>Integrations</span>
+          <span class="sb-nav-badge info">2</span>
+        </div>
+      </div>
+    </div>
+    <div class="sb-footer">FVL Portal v2.4.1<br>© 2025 Backhaul Direct</div>
+  </div>
+
+  <!-- MAIN -->
+  <div id="main">
+    <!-- TOPBAR -->
+    <div id="topbar">
+      <div class="tb-search">
+        <span class="tb-search-icon">🔍</span>
+        <input type="text" id="global-search" placeholder="Search VIN, move ID, dealer, claim #..." onfocus="openSearch()" oninput="filterSearch(this.value)">
+        <span class="tb-search-hint">⌘K</span>
+        <div class="search-dropdown" id="search-dropdown">
+          <div class="sd-section">VINs</div>
+          <div class="sd-item" onclick="openVinDetail('1FTFW1ET5EFA12345')"><span class="sd-icon">🚗</span><div><div class="sd-main mono">1FTFW1ET5EFA12345</div><div class="sd-sub">2024 F-150 XLT • Garber Ford Detroit • In Transit</div></div></div>
+          <div class="sd-item" onclick="openVinDetail('1FTFW1ET5EFA67890')"><span class="sd-icon">🚗</span><div><div class="sd-main mono">1FTFW1ET5EFA67890</div><div class="sd-sub">2024 Explorer ST • Serra Ford • Delivered</div></div></div>
+          <div class="sd-section">Claims</div>
+          <div class="sd-item" onclick="openClaimDetail('CLM-2024-0847')"><span class="sd-icon">⚑</span><div><div class="sd-main">CLM-2024-0847</div><div class="sd-sub">Left rear quarter panel dent • SLA breach risk</div></div></div>
+          <div class="sd-section">Moves</div>
+          <div class="sd-item" onclick="nav('moves')"><span class="sd-icon">↔</span><div><div class="sd-main mono">MVR-2024-11422</div><div class="sd-sub">Dearborn MI → Garber Ford Detroit • 12 units</div></div></div>
+        </div>
+      </div>
+      <div class="tb-spacer"></div>
+      <div class="tb-btn" onclick="nav('exceptions')" data-tip="Exceptions"><span>⚠</span></div>
+      <div class="tb-btn" onclick="openModal('notif-modal')" data-tip="Notifications" style="position:relative">
+        <span>🔔</span><div class="tb-notif-dot"></div>
+      </div>
+      <div class="tb-user" onclick="openModal('account-modal')">
+        <div class="tb-user-av" id="tb-user-av">JM</div>
+        <div class="tb-user-name" id="tb-user-name">J. Miller</div>
+        <span class="tb-role-badge" id="tb-role-badge">OEM Admin</span>
+      </div>
+    </div>
+    <!-- ACCOUNT SWITCHER DROPDOWN -->
+    <div class="account-switcher" id="account-switcher">
+      <div style="padding:4px 8px 8px;font-size:10px;font-weight:700;color:var(--c-text-muted);text-transform:uppercase;letter-spacing:0.5px">Switch Account</div>
+      <div class="acct-item active" onclick="switchAccount('Ford Motor Co.','OEM Admin')"><div class="acct-name">Ford Motor Co.</div><div class="acct-meta">OEM Admin • 42 dealers</div></div>
+      <div class="acct-item" onclick="switchAccount('GM Logistics','OEM Admin')"><div class="acct-name">GM Logistics</div><div class="acct-meta">OEM Admin • 67 dealers</div></div>
+      <div class="acct-item" onclick="switchAccount('Garber Ford Detroit','Dealer Admin')"><div class="acct-name">Garber Ford Detroit</div><div class="acct-meta">Dealer Admin</div></div>
+      <div class="acct-item" onclick="switchAccount('All Accounts','Internal Ops')"><div class="acct-name">All Accounts</div><div class="acct-meta">Backhaul Direct Internal</div></div>
+    </div>
+
+    <!-- ═══════════════════ PAGES ═══════════════════ -->
+    <div id="content">
+
+      <!-- ═══ DASHBOARD (OEM) ═══ -->
+      <div class="page active" id="page-dashboard">
+        <div class="page-header">
+          <div>
+            <div class="page-title" id="dash-title">OEM Dashboard — Ford Motor Co.</div>
+            <div class="page-subtitle">Live snapshot · Updated 2 min ago · <span id="dash-date">Tue Dec 10, 2024</span></div>
+          </div>
+          <div class="page-actions">
+            <button class="btn btn-secondary btn-sm" onclick="openModal('filters-modal')">⚙ Saved Views</button>
+            <button class="btn btn-secondary btn-sm">📥 Export</button>
+            <button class="btn btn-primary btn-sm" onclick="openModal('add-event-modal')">+ Add Event</button>
+          </div>
+        </div>
+        <!-- DEALER TOGGLE (shown for dealer role) -->
+        <div id="dealer-dash-banner" style="display:none;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:var(--radius-lg);padding:14px 18px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between">
+          <div style="display:flex;align-items:center;gap:10px">
+            <span style="font-size:20px">🏪</span>
+            <div>
+              <div style="font-size:14px;font-weight:700">Welcome, Garber Ford Detroit</div>
+              <div style="font-size:12px;color:var(--c-text-secondary)">You have <strong>3 vehicles needing attention</strong> and 2 open claims</div>
+            </div>
+          </div>
+          <button class="btn btn-secondary btn-sm" onclick="nav('claims')">View Claims →</button>
+        </div>
+        <!-- OEM KPIs -->
+        <div class="kpi-grid" id="oem-kpis">
+          <div class="kpi-card success" onclick="nav('vehicles')">
+            <div class="kpi-label">Total Active Vehicles</div>
+            <div class="kpi-value">3,847</div>
+            <div class="kpi-sub"><span class="kpi-delta-up">↑ 4.2%</span> vs last 30 days</div>
+          </div>
+          <div class="kpi-card accent" onclick="nav('moves')">
+            <div class="kpi-label">On-Time Delivery %</div>
+            <div class="kpi-value">94.1%</div>
+            <div class="kpi-sub"><span class="kpi-delta-down">↓ 0.8%</span> vs target 96%</div>
+          </div>
+          <div class="kpi-card warning" onclick="nav('claims')">
+            <div class="kpi-label">Damage Ratio</div>
+            <div class="kpi-value">2.4</div>
+            <div class="kpi-sub">per 100 vehicles <span class="kpi-delta-up">↓ improving</span></div>
+          </div>
+          <div class="kpi-card danger" onclick="nav('claims')">
+            <div class="kpi-label">Open Claims</div>
+            <div class="kpi-value">14</div>
+            <div class="kpi-sub"><span style="color:var(--c-danger);font-weight:600">3 SLA breach risk</span></div>
+          </div>
+          <div class="kpi-card accent">
+            <div class="kpi-label">Avg Transit Time</div>
+            <div class="kpi-value">4.2d</div>
+            <div class="kpi-sub">Lane avg <span class="kpi-delta-up">↑ 0.3d faster</span></div>
+          </div>
+          <div class="kpi-card purple" onclick="nav('claims')">
+            <div class="kpi-label">Claim Cycle Time</div>
+            <div class="kpi-value">6.8d</div>
+            <div class="kpi-sub">Avg open→close <span class="kpi-delta-down">↓ vs 5d target</span></div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Coding Compliance</div>
+            <div class="kpi-value">91%</div>
+            <div class="kpi-sub">AIAG complete <span class="kpi-delta-up">↑ 3%</span></div>
+          </div>
+          <div class="kpi-card warning">
+            <div class="kpi-label">SLA Breach Rate</div>
+            <div class="kpi-value">8.3%</div>
+            <div class="kpi-sub"><span class="kpi-delta-down">↑ vs 5% target</span></div>
+          </div>
+        </div>
+
+        <!-- DEALER SIMPLE KPIs (shown for dealer role) -->
+        <div class="kpi-grid" id="dealer-kpis" style="display:none">
+          <div class="kpi-card accent"><div class="kpi-label">Vehicles In Transit</div><div class="kpi-value">18</div><div class="kpi-sub">Expected arrivals this week</div></div>
+          <div class="kpi-card success"><div class="kpi-label">Delivered This Month</div><div class="kpi-value">47</div><div class="kpi-sub">vs 41 last month</div></div>
+          <div class="kpi-card danger"><div class="kpi-label">Action Needed</div><div class="kpi-value">3</div><div class="kpi-sub">Require your response</div></div>
+          <div class="kpi-card warning"><div class="kpi-label">Open Claims</div><div class="kpi-value">2</div><div class="kpi-sub">1 awaiting your info</div></div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+          <!-- Claims by status -->
+          <div class="section-card">
+            <div class="section-card-header">
+              <div class="section-card-title">Claims by Status</div>
+              <button class="btn btn-ghost btn-sm" onclick="nav('claims')">View all →</button>
+            </div>
+            <div class="bar-chart">
+              <div class="bar-row"><div class="bar-label">Open</div><div class="bar-track"><div class="bar-fill" style="width:40%;background:var(--c-danger)">4</div></div><div class="bar-val">4</div></div>
+              <div class="bar-row"><div class="bar-label">Acknowledged</div><div class="bar-track"><div class="bar-fill" style="width:30%;background:var(--c-warning)">3</div></div><div class="bar-val">3</div></div>
+              <div class="bar-row"><div class="bar-label">Under Review</div><div class="bar-track"><div class="bar-fill" style="width:20%;background:var(--c-accent)">2</div></div><div class="bar-val">2</div></div>
+              <div class="bar-row"><div class="bar-label">Decision</div><div class="bar-track"><div class="bar-fill" style="width:30%;background:var(--c-purple)">3</div></div><div class="bar-val">3</div></div>
+              <div class="bar-row"><div class="bar-label">Settlement</div><div class="bar-track"><div class="bar-fill" style="width:20%;background:#0891b2">2</div></div><div class="bar-val">2</div></div>
+            </div>
+          </div>
+          <!-- Top damage types -->
+          <div class="section-card">
+            <div class="section-card-header">
+              <div class="section-card-title">Top Damage Types (30 days)</div>
+              <button class="btn btn-ghost btn-sm" onclick="nav('reports')">Drill down →</button>
+            </div>
+            <div class="bar-chart">
+              <div class="bar-row"><div class="bar-label">Scratch</div><div class="bar-track"><div class="bar-fill" style="width:70%;background:var(--c-accent)">28</div></div><div class="bar-val">28</div></div>
+              <div class="bar-row"><div class="bar-label">Dent</div><div class="bar-track"><div class="bar-fill" style="width:50%;background:#0891b2">19</div></div><div class="bar-val">19</div></div>
+              <div class="bar-row"><div class="bar-label">Chip</div><div class="bar-track"><div class="bar-fill" style="width:35%;background:var(--c-purple)">14</div></div><div class="bar-val">14</div></div>
+              <div class="bar-row"><div class="bar-label">Broken</div><div class="bar-track"><div class="bar-fill" style="width:20%;background:var(--c-danger)">8</div></div><div class="bar-val">8</div></div>
+              <div class="bar-row"><div class="bar-label">Missing</div><div class="bar-track"><div class="bar-fill" style="width:12%;background:var(--c-warning)">5</div></div><div class="bar-val">5</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent activity -->
+        <div class="section-card" style="margin-top:20px">
+          <div class="section-card-header">
+            <div class="section-card-title">Recent Activity</div>
+            <button class="btn btn-ghost btn-sm">See all</button>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>VIN</th><th>Event</th><th>Move</th><th>Location</th><th>Carrier</th><th>Status</th><th>Time</th></tr></thead>
+              <tbody>
+                <tr class="clickable" onclick="openVinDetail('1FTFW1ET5EFA12345')">
+                  <td><span class="mono text-accent">1FTFW1ET5EFA12345</span></td>
+                  <td>Delivery Complete</td>
+                  <td><span class="mono">MVR-11422</span></td>
+                  <td>Garber Ford, Detroit MI</td>
+                  <td>Allied Transport</td>
+                  <td><span class="badge badge-success badge-dot">Delivered</span></td>
+                  <td class="text-muted">4m ago</td>
+                </tr>
+                <tr class="clickable" onclick="openVinDetail('1FTFW1ET5EFB22233')">
+                  <td><span class="mono text-accent">1FTFW1ET5EFB22233</span></td>
+                  <td><span style="color:var(--c-danger);font-weight:600">Damage Reported</span></td>
+                  <td><span class="mono">MVR-11398</span></td>
+                  <td>Toledo Yard</td>
+                  <td>Jack Cooper</td>
+                  <td><span class="badge badge-danger badge-dot">Claim Open</span></td>
+                  <td class="text-muted">38m ago</td>
+                </tr>
+                <tr class="clickable" onclick="nav('moves')">
+                  <td><span class="mono text-accent">1FTFW1ET5EFC33344</span></td>
+                  <td>Pickup Confirmed</td>
+                  <td><span class="mono">MVR-11445</span></td>
+                  <td>Dearborn Assembly</td>
+                  <td>United Road</td>
+                  <td><span class="badge badge-info badge-dot">In Transit</span></td>
+                  <td class="text-muted">1h ago</td>
+                </tr>
+                <tr class="clickable">
+                  <td><span class="mono text-accent">1FTFW1ET5EFD44455</span></td>
+                  <td>Yard-In</td>
+                  <td><span class="mono">MVR-11401</span></td>
+                  <td>Louisville Rail Ramp</td>
+                  <td>AutoInfo</td>
+                  <td><span class="badge badge-neutral badge-dot">At Yard</span></td>
+                  <td class="text-muted">2h ago</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ VEHICLES ═══ -->
+      <div class="page" id="page-vehicles">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Vehicles / VIN Search</div>
+            <div class="page-subtitle">3,847 total vehicles · 284 in transit · 12 exceptions</div>
+          </div>
+          <div class="page-actions">
+            <button class="btn btn-secondary btn-sm">⬇ Export CSV</button>
+            <button class="btn btn-secondary btn-sm">⊞ Saved Views</button>
+          </div>
+        </div>
+        <div class="section-card">
+          <div class="filter-bar">
+            <span class="filter-label">Filters:</span>
+            <select class="filter-select"><option>All Customers</option><option>Ford Motor Co.</option><option>GM Logistics</option></select>
+            <select class="filter-select"><option>All Dealers</option><option>Garber Ford</option><option>Serra Ford</option></select>
+            <select class="filter-select"><option>All Statuses</option><option>In Transit</option><option>Delivered</option><option>At Yard</option><option>At Port</option><option>Exception</option></select>
+            <select class="filter-select"><option>All Carriers</option><option>Allied Transport</option><option>Jack Cooper</option><option>United Road</option></select>
+            <input class="filter-input" placeholder="VIN contains..." type="text">
+            <div class="filter-spacer"></div>
+            <button class="btn btn-secondary btn-sm">Clear</button>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr>
+                <th><input type="checkbox"></th>
+                <th>VIN</th><th>Year/Make/Model</th><th>Color</th>
+                <th>Customer / Dealer</th><th>Current Location</th><th>Status</th>
+                <th>Last Event</th><th>Exceptions</th><th></th>
+              </tr></thead>
+              <tbody>
+                <tr class="clickable" onclick="openVinDetail('1FTFW1ET5EFA12345')">
+                  <td><input type="checkbox" onclick="event.stopPropagation()"></td>
+                  <td><span class="mono text-accent">1FTFW1ET5EFA12345</span></td>
+                  <td>2024 F-150 XLT</td><td>Carbonized Gray</td>
+                  <td>Ford / Garber Ford Detroit</td>
+                  <td>Delivered to dealer</td>
+                  <td><span class="badge badge-success badge-dot">Delivered</span></td>
+                  <td class="text-muted" style="font-size:11px">4m ago</td>
+                  <td>—</td>
+                  <td><button class="btn btn-ghost btn-xs">→</button></td>
+                </tr>
+                <tr class="clickable" onclick="openVinDetail('1FTFW1ET5EFB22233')">
+                  <td><input type="checkbox" onclick="event.stopPropagation()"></td>
+                  <td><span class="mono text-accent">1FTFW1ET5EFB22233</span></td>
+                  <td>2024 F-150 Lariat</td><td>Iconic Silver</td>
+                  <td>Ford / Garber Ford Detroit</td>
+                  <td>Toledo Yard</td>
+                  <td><span class="badge badge-warning badge-dot">At Yard</span></td>
+                  <td class="text-muted" style="font-size:11px">38m ago</td>
+                  <td><span class="badge badge-danger">Damage</span></td>
+                  <td><button class="btn btn-ghost btn-xs">→</button></td>
+                </tr>
+                <tr class="clickable" onclick="openVinDetail('1FTFW1ET5EFC33344')">
+                  <td><input type="checkbox" onclick="event.stopPropagation()"></td>
+                  <td><span class="mono text-accent">1FTFW1ET5EFC33344</span></td>
+                  <td>2024 Explorer ST</td><td>Star White</td>
+                  <td>Ford / Serra Ford</td>
+                  <td>In Transit — I-75 N</td>
+                  <td><span class="badge badge-info badge-dot">In Transit</span></td>
+                  <td class="text-muted" style="font-size:11px">1h ago</td>
+                  <td>—</td>
+                  <td><button class="btn btn-ghost btn-xs">→</button></td>
+                </tr>
+                <tr class="clickable">
+                  <td><input type="checkbox" onclick="event.stopPropagation()"></td>
+                  <td><span class="mono text-accent">1FTFW1ET5EFD44455</span></td>
+                  <td>2024 Maverick XLT</td><td>Area 51</td>
+                  <td>Ford / AutoNation Ford</td>
+                  <td>Louisville Rail Ramp</td>
+                  <td><span class="badge badge-neutral badge-dot">At Ramp</span></td>
+                  <td class="text-muted" style="font-size:11px">2h ago</td>
+                  <td><span class="badge badge-warning">Late</span></td>
+                  <td><button class="btn btn-ghost btn-xs">→</button></td>
+                </tr>
+                <tr class="clickable">
+                  <td><input type="checkbox" onclick="event.stopPropagation()"></td>
+                  <td><span class="mono text-accent">1FTFW1ET5EFE55566</span></td>
+                  <td>2024 Mustang GT</td><td>Race Red</td>
+                  <td>Ford / Penske Ford</td>
+                  <td>Chicago Port</td>
+                  <td><span class="badge badge-neutral badge-dot">At Port</span></td>
+                  <td class="text-muted" style="font-size:11px">5h ago</td>
+                  <td>—</td>
+                  <td><button class="btn btn-ghost btn-xs">→</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ VIN DETAIL ═══ -->
+      <div class="page" id="page-vin-detail">
+        <div class="breadcrumb">
+          <a onclick="nav('vehicles')">Vehicles</a> › 
+          <span id="vin-detail-vin" class="mono">1FTFW1ET5EFA12345</span>
+        </div>
+        <div class="page-header">
+          <div>
+            <div class="page-title" id="vin-detail-title">2024 Ford F-150 XLT</div>
+            <div class="page-subtitle"><span class="mono" id="vin-detail-vin2">1FTFW1ET5EFA12345</span> · Carbonized Gray · Ford / Garber Ford Detroit</div>
+          </div>
+          <div class="page-actions">
+            <button class="btn btn-secondary btn-sm" onclick="openModal('add-inspection-modal')">+ Inspection</button>
+            <button class="btn btn-secondary btn-sm" onclick="openModal('add-event-modal')">+ Event</button>
+            <button class="btn btn-primary btn-sm" onclick="openModal('create-claim-modal')">⚑ Open Claim</button>
+          </div>
+        </div>
+        <!-- Status banner -->
+        <div style="display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap">
+          <div style="padding:8px 14px;background:var(--c-success-bg);border:1px solid #bbf7d0;border-radius:var(--radius-lg);display:flex;align-items:center;gap:8px">
+            <span style="font-size:16px">✓</span>
+            <div><div style="font-size:12px;font-weight:700;color:var(--c-success)">DELIVERED</div><div style="font-size:11px;color:var(--c-text-secondary)">Dec 10, 2024 09:14 AM</div></div>
+          </div>
+          <div style="padding:8px 14px;background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--radius-lg)">
+            <div style="font-size:11px;color:var(--c-text-muted)">Carrier</div>
+            <div style="font-size:13px;font-weight:600">Allied Transport</div>
+          </div>
+          <div style="padding:8px 14px;background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--radius-lg)">
+            <div style="font-size:11px;color:var(--c-text-muted)">Move ID</div>
+            <div style="font-size:13px;font-weight:600 " class="mono">MVR-11422</div>
+          </div>
+          <div style="padding:8px 14px;background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--radius-lg)">
+            <div style="font-size:11px;color:var(--c-text-muted)">Damages</div>
+            <div style="font-size:13px;font-weight:600;color:var(--c-danger)">0 reported</div>
+          </div>
+        </div>
+        <div class="tab-bar" id="vin-tabs">
+          <div class="tab-item active" onclick="switchTab('vin-tabs','vin-tab-',0)">Timeline</div>
+          <div class="tab-item" onclick="switchTab('vin-tabs','vin-tab-',1)">Inspections & Damages</div>
+          <div class="tab-item" onclick="switchTab('vin-tabs','vin-tab-',2)">Claims</div>
+          <div class="tab-item" onclick="switchTab('vin-tabs','vin-tab-',3)">Documents</div>
+          <div class="tab-item" onclick="switchTab('vin-tabs','vin-tab-',4)">Vehicle Details</div>
+        </div>
+        <div style="background:var(--c-surface);border:1px solid var(--c-border);border-top:none;border-radius:0 0 var(--radius-lg) var(--radius-lg)">
+          <!-- Timeline tab -->
+          <div class="tab-content active" id="vin-tab-0">
+            <div style="max-width:600px">
+              <div class="timeline">
+                <div class="tl-item">
+                  <div class="tl-dot delivered"></div>
+                  <div class="tl-time">Dec 10, 2024 · 09:14 AM</div>
+                  <div class="tl-title">✓ Delivery Complete</div>
+                  <div class="tl-detail">Garber Ford Detroit, 4540 Woodward Ave, Detroit MI 48201</div>
+                  <div class="tl-party">👤 Mike Torres (Dealer Contact) · Allied Transport</div>
+                  <div style="margin-top:6px"><span class="badge badge-success">POD on file</span> <span class="badge badge-success">Inspection complete</span></div>
+                </div>
+                <div class="tl-item">
+                  <div class="tl-dot active"></div>
+                  <div class="tl-time">Dec 9, 2024 · 2:30 PM</div>
+                  <div class="tl-title">Pickup from Toledo Yard</div>
+                  <div class="tl-detail">Toledo Vehicle Distribution Yard, Toledo OH</div>
+                  <div class="tl-party">👤 Sarah Kim (Yard Mgr) · Allied Transport</div>
+                </div>
+                <div class="tl-item">
+                  <div class="tl-dot"></div>
+                  <div class="tl-time">Dec 8, 2024 · 11:00 AM</div>
+                  <div class="tl-title">Yard-Out (Louisville Ramp)</div>
+                  <div class="tl-detail">Louisville KY Rail Ramp → Toledo Yard dispatch</div>
+                  <div class="tl-party">👤 AutoInfo (Carrier) · Jack Cooper</div>
+                </div>
+                <div class="tl-item">
+                  <div class="tl-dot"></div>
+                  <div class="tl-time">Dec 5, 2024 · 8:45 AM</div>
+                  <div class="tl-title">Rail Ramp Arrival — Louisville KY</div>
+                  <div class="tl-detail">CSXT Louisville Ramp · Car #TTGX 776543</div>
+                  <div class="tl-party">👤 Intermodal Ops · Norfolk Southern</div>
+                </div>
+                <div class="tl-item">
+                  <div class="tl-dot"></div>
+                  <div class="tl-time">Dec 2, 2024 · 6:00 AM</div>
+                  <div class="tl-title">Pickup from Origin</div>
+                  <div class="tl-detail">Dearborn Assembly Plant, Dearborn MI</div>
+                  <div class="tl-party">👤 Gate Log Auto · United Road</div>
+                  <div style="margin-top:6px"><span class="badge badge-info">Inspection: No Damage</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Inspections tab -->
+          <div class="tab-content" id="vin-tab-1">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+              <div style="font-size:13px;font-weight:600">2 Inspections · 0 Damage Lines</div>
+              <button class="btn btn-primary btn-sm" onclick="openModal('add-inspection-modal')">+ Add Inspection</button>
+            </div>
+            <div class="section-card">
+              <div class="section-card-header" style="background:var(--c-success-bg)">
+                <div><div class="section-card-title" style="color:var(--c-success)">Pickup Inspection — Dec 2, 2024</div><div style="font-size:11px;color:var(--c-text-secondary)">Dearborn Assembly · United Road · Mike Johnson</div></div>
+                <span class="badge badge-success">No Damage</span>
+              </div>
+              <div style="padding:12px 18px;font-size:12px;color:var(--c-text-secondary)">No damage noted at origin. Vehicle meets condition standard. POD uploaded.</div>
+            </div>
+            <div class="section-card">
+              <div class="section-card-header" style="background:var(--c-success-bg)">
+                <div><div class="section-card-title" style="color:var(--c-success)">Delivery Inspection — Dec 10, 2024</div><div style="font-size:11px;color:var(--c-text-secondary)">Garber Ford Detroit · Allied Transport · Derek Lane</div></div>
+                <span class="badge badge-success">No Damage</span>
+              </div>
+              <div style="padding:12px 18px;font-size:12px;color:var(--c-text-secondary)">Vehicle received in clean condition. Dealer rep signed off.</div>
+            </div>
+            <div class="empty-state" style="padding:24px">
+              <div class="empty-state-title">No damages recorded for this vehicle</div>
+              <div class="empty-state-desc">All inspections passed with no damage noted.</div>
+            </div>
+          </div>
+          <!-- Claims tab -->
+          <div class="tab-content" id="vin-tab-2">
+            <div class="empty-state">
+              <div class="empty-state-icon">✓</div>
+              <div class="empty-state-title">No claims for this vehicle</div>
+              <div class="empty-state-desc">This vehicle has been delivered with no damage claims.</div>
+              <button class="btn btn-secondary btn-sm" style="margin-top:12px" onclick="openModal('create-claim-modal')">Open a Claim Anyway</button>
+            </div>
+          </div>
+          <!-- Documents tab -->
+          <div class="tab-content" id="vin-tab-3">
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border:1px solid var(--c-border);border-radius:var(--radius)">
+                <div style="display:flex;align-items:center;gap:8px"><span>📄</span><div><div style="font-size:12px;font-weight:600">POD_MVR11422_Delivery.pdf</div><div style="font-size:11px;color:var(--c-text-muted)">Uploaded Dec 10 · 244KB</div></div></div>
+                <button class="btn btn-ghost btn-sm">⬇ Download</button>
+              </div>
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border:1px solid var(--c-border);border-radius:var(--radius)">
+                <div style="display:flex;align-items:center;gap:8px"><span>📄</span><div><div style="font-size:12px;font-weight:600">Inspection_Pickup_Dec2.pdf</div><div style="font-size:11px;color:var(--c-text-muted)">Uploaded Dec 2 · 88KB</div></div></div>
+                <button class="btn btn-ghost btn-sm">⬇ Download</button>
+              </div>
+            </div>
+          </div>
+          <!-- Vehicle Details tab -->
+          <div class="tab-content" id="vin-tab-4">
+            <div class="form-grid">
+              <div><div class="info-card">
+                <div class="info-card-title">Vehicle Identification</div>
+                <div class="info-row"><div class="info-key">VIN</div><div class="info-val mono">1FTFW1ET5EFA12345</div></div>
+                <div class="info-row"><div class="info-key">Year</div><div class="info-val">2024</div></div>
+                <div class="info-row"><div class="info-key">Make</div><div class="info-val">Ford</div></div>
+                <div class="info-row"><div class="info-key">Model</div><div class="info-val">F-150</div></div>
+                <div class="info-row"><div class="info-key">Trim</div><div class="info-val">XLT SuperCrew 4WD</div></div>
+                <div class="info-row"><div class="info-key">Color (Ext.)</div><div class="info-val">Carbonized Gray M</div></div>
+                <div class="info-row"><div class="info-key">Vehicle Type</div><div class="info-val">Truck / ICE</div></div>
+              </div></div>
+              <div><div class="info-card">
+                <div class="info-card-title">Logistics Details</div>
+                <div class="info-row"><div class="info-key">Customer</div><div class="info-val">Ford Motor Co.</div></div>
+                <div class="info-row"><div class="info-key">Dealer</div><div class="info-val">Garber Ford Detroit</div></div>
+                <div class="info-row"><div class="info-key">Origin</div><div class="info-val">Dearborn Assembly</div></div>
+                <div class="info-row"><div class="info-key">Destination</div><div class="info-val">Garber Ford Detroit</div></div>
+                <div class="info-row"><div class="info-key">Equipment</div><div class="info-val">9-car open auto hauler</div></div>
+                <div class="info-row"><div class="info-key">Priority</div><div class="info-val"><span class="badge badge-warning">High</span></div></div>
+              </div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ MOVES ═══ -->
+      <div class="page" id="page-moves">
+        <div class="page-header">
+          <div><div class="page-title">Moves / Shipments</div><div class="page-subtitle">284 active moves · 12 exceptions</div></div>
+          <div class="page-actions">
+            <button class="btn btn-secondary btn-sm">⬇ Export</button>
+            <button class="btn btn-primary btn-sm" onclick="openModal('add-event-modal')">+ Add Event</button>
+          </div>
+        </div>
+        <div class="section-card">
+          <div class="filter-bar">
+            <select class="filter-select"><option>All Statuses</option><option>In Transit</option><option>Pickup Pending</option><option>Delivered</option><option>Exception</option></select>
+            <select class="filter-select"><option>All Carriers</option><option>Allied Transport</option><option>Jack Cooper</option><option>United Road</option></select>
+            <select class="filter-select"><option>All Origins</option><option>Dearborn Assembly</option><option>Chicago Port</option></select>
+            <input class="filter-input" placeholder="Move ID..." type="text">
+            <div class="filter-spacer"></div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr>
+                <th><input type="checkbox"></th>
+                <th>Move ID</th><th>VINs</th><th>Origin → Destination</th>
+                <th>Carrier</th><th>Equipment</th><th>Planned Del.</th><th>Status</th><th>Exceptions</th><th></th>
+              </tr></thead>
+              <tbody>
+                <tr class="clickable" onclick="openMoveDetail('MVR-11422')">
+                  <td><input type="checkbox" onclick="e=>e.stopPropagation()"></td>
+                  <td class="mono text-accent">MVR-11422</td>
+                  <td>9 VINs</td>
+                  <td style="font-size:12px">Dearborn → Garber Ford Detroit</td>
+                  <td>Allied Transport</td>
+                  <td style="font-size:11px">9-car open</td>
+                  <td style="font-size:12px">Dec 10, 2024</td>
+                  <td><span class="badge badge-success badge-dot">Delivered</span></td>
+                  <td>—</td>
+                  <td><button class="btn btn-ghost btn-xs">→</button></td>
+                </tr>
+                <tr class="clickable" onclick="openMoveDetail('MVR-11398')">
+                  <td><input type="checkbox" onclick="e=>e.stopPropagation()"></td>
+                  <td class="mono text-accent">MVR-11398</td>
+                  <td>12 VINs</td>
+                  <td style="font-size:12px">Toledo Yard → Garber Ford</td>
+                  <td>Jack Cooper</td>
+                  <td style="font-size:11px">6-car enclosed</td>
+                  <td style="font-size:12px">Dec 12, 2024</td>
+                  <td><span class="badge badge-info badge-dot">In Transit</span></td>
+                  <td><span class="badge badge-danger">Damage</span></td>
+                  <td><button class="btn btn-ghost btn-xs">→</button></td>
+                </tr>
+                <tr class="clickable">
+                  <td><input type="checkbox" onclick="e=>e.stopPropagation()"></td>
+                  <td class="mono text-accent">MVR-11445</td>
+                  <td>6 VINs</td>
+                  <td style="font-size:12px">Dearborn → Serra Ford</td>
+                  <td>United Road</td>
+                  <td style="font-size:11px">9-car open</td>
+                  <td style="font-size:12px">Dec 14, 2024</td>
+                  <td><span class="badge badge-info badge-dot">In Transit</span></td>
+                  <td>—</td>
+                  <td><button class="btn btn-ghost btn-xs">→</button></td>
+                </tr>
+                <tr class="clickable">
+                  <td><input type="checkbox" onclick="e=>e.stopPropagation()"></td>
+                  <td class="mono text-accent">MVR-11401</td>
+                  <td>20 VINs</td>
+                  <td style="font-size:12px">Louisville Ramp → Toledo Yard</td>
+                  <td>AutoInfo</td>
+                  <td style="font-size:11px">Rail / Auto-rack</td>
+                  <td style="font-size:12px">Dec 11, 2024</td>
+                  <td><span class="badge badge-warning badge-dot">At Ramp</span></td>
+                  <td><span class="badge badge-warning">Late</span></td>
+                  <td><button class="btn btn-ghost btn-xs">→</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ CLAIMS ═══ -->
+      <div class="page" id="page-claims">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Claims Queue</div>
+            <div class="page-subtitle">14 open · 3 SLA breach risk · <span id="claims-role-label">OEM / Internal view</span></div>
+          </div>
+          <div class="page-actions">
+            <button class="btn btn-secondary btn-sm">⬇ Export CSV</button>
+            <button class="btn btn-secondary btn-sm">⊞ Bulk Assign</button>
+            <button class="btn btn-primary btn-sm" onclick="openModal('create-claim-modal')">+ Create Claim</button>
+          </div>
+        </div>
+        <!-- Workflow status bar -->
+        <div class="claim-workflow" style="margin-bottom:20px">
+          <div class="claim-stage"><div class="claim-stage-box active" onclick="filterClaimsBy('Open')">Open <span style="background:rgba(255,255,255,0.3);padding:1px 6px;border-radius:8px;margin-left:4px">4</span></div></div>
+          <div class="claim-stage-arrow">→</div>
+          <div class="claim-stage"><div class="claim-stage-box" onclick="filterClaimsBy('Acknowledged')">Acknowledged <span style="background:var(--c-bg);padding:1px 6px;border-radius:8px;margin-left:4px;color:var(--c-warning)">3</span></div></div>
+          <div class="claim-stage-arrow">→</div>
+          <div class="claim-stage"><div class="claim-stage-box" onclick="filterClaimsBy('Under Review')">Under Review <span style="background:var(--c-bg);padding:1px 6px;border-radius:8px;margin-left:4px">2</span></div></div>
+          <div class="claim-stage-arrow">→</div>
+          <div class="claim-stage"><div class="claim-stage-box" onclick="filterClaimsBy('Decision')">Liability Decision <span style="background:var(--c-bg);padding:1px 6px;border-radius:8px;margin-left:4px">3</span></div></div>
+          <div class="claim-stage-arrow">→</div>
+          <div class="claim-stage"><div class="claim-stage-box" onclick="filterClaimsBy('Settlement')">Settlement <span style="background:var(--c-bg);padding:1px 6px;border-radius:8px;margin-left:4px">2</span></div></div>
+          <div class="claim-stage-arrow">→</div>
+          <div class="claim-stage"><div class="claim-stage-box done" onclick="filterClaimsBy('Closed')">Closed <span style="background:rgba(255,255,255,0.3);padding:1px 6px;border-radius:8px;margin-left:4px">47</span></div></div>
+        </div>
+        <div class="section-card">
+          <div class="filter-bar">
+            <select class="filter-select"><option>All Statuses</option><option>Open</option><option>Acknowledged</option><option>Under Review</option><option>Decision</option><option>Settlement</option><option>Closed</option></select>
+            <select class="filter-select"><option>All Priority</option><option>High</option><option>Medium</option><option>Low</option></select>
+            <select class="filter-select"><option>All Carriers</option><option>Allied Transport</option><option>Jack Cooper</option><option>United Road</option></select>
+            <select class="filter-select"><option>All Dealers</option><option>Garber Ford</option><option>Serra Ford</option></select>
+            <select class="filter-select"><option>SLA: All</option><option>Breach Risk</option><option>In SLA</option><option>Breached</option></select>
+            <div class="filter-spacer"></div>
+            <button class="btn btn-secondary btn-sm">⊞ Saved Filters</button>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr>
+                <th><input type="checkbox"></th>
+                <th>Claim #</th><th>VIN / Move</th><th>Damage Summary</th>
+                <th>Carrier</th><th>Dealer</th><th>Age</th>
+                <th>SLA</th><th>Status</th><th>Owner</th><th></th>
+              </tr></thead>
+              <tbody>
+                <tr class="clickable" onclick="openClaimDetail('CLM-2024-0847')">
+                  <td><input type="checkbox" onclick="e=>e.stopPropagation()"></td>
+                  <td class="mono text-accent">CLM-2024-0847</td>
+                  <td><div class="mono" style="font-size:11px">1FTFW1ET5EFB22233</div><div class="text-muted" style="font-size:11px">MVR-11398</div></td>
+                  <td style="font-size:12px">Left rear quarter panel dent · Moderate <div class="mono text-muted" style="font-size:10px">BD-LR-QP-DN-3</div></td>
+                  <td style="font-size:12px">Jack Cooper</td>
+                  <td style="font-size:12px">Garber Ford</td>
+                  <td style="font-size:12px;color:var(--c-danger);font-weight:600">6d</td>
+                  <td><span class="sla-pill sla-breach">⏱ 2d over</span></td>
+                  <td><span class="badge badge-danger">Open</span></td>
+                  <td style="font-size:12px">T. Wallace</td>
+                  <td><button class="btn btn-ghost btn-xs">→</button></td>
+                </tr>
+                <tr class="clickable" onclick="openClaimDetail('CLM-2024-0839')">
+                  <td><input type="checkbox" onclick="e=>e.stopPropagation()"></td>
+                  <td class="mono text-accent">CLM-2024-0839</td>
+                  <td><div class="mono" style="font-size:11px">1FTFW1ET5EFC33344</div><div class="text-muted" style="font-size:11px">MVR-11401</div></td>
+                  <td style="font-size:12px">Hood chip, front bumper scratch · Minor <div class="mono text-muted" style="font-size:10px">BD-FH-CP-1 / BD-FB-SC-1</div></td>
+                  <td style="font-size:12px">United Road</td>
+                  <td style="font-size:12px">Serra Ford</td>
+                  <td style="font-size:12px">3d</td>
+                  <td><span class="sla-pill sla-warn">⏱ 2d left</span></td>
+                  <td><span class="badge badge-warning">Acknowledged</span></td>
+                  <td style="font-size:12px">L. Chen</td>
+                  <td><button class="btn btn-ghost btn-xs">→</button></td>
+                </tr>
+                <tr class="clickable" onclick="openClaimDetail('CLM-2024-0821')">
+                  <td><input type="checkbox" onclick="e=>e.stopPropagation()"></td>
+                  <td class="mono text-accent">CLM-2024-0821</td>
+                  <td><div class="mono" style="font-size:11px">1FTFW1ET5EFD44455</div><div class="text-muted" style="font-size:11px">MVR-11389</div></td>
+                  <td style="font-size:12px">Broken side mirror · Major <div class="mono text-muted" style="font-size:10px">BD-LF-MR-BR-4</div></td>
+                  <td style="font-size:12px">Allied Transport</td>
+                  <td style="font-size:12px">AutoNation Ford</td>
+                  <td style="font-size:12px">8d</td>
+                  <td><span class="sla-pill sla-ok">✓ On track</span></td>
+                  <td><span class="badge badge-purple">Decision</span></td>
+                  <td style="font-size:12px">T. Wallace</td>
+                  <td><button class="btn btn-ghost btn-xs">→</button></td>
+                </tr>
+                <tr class="clickable">
+                  <td><input type="checkbox" onclick="e=>e.stopPropagation()"></td>
+                  <td class="mono text-accent">CLM-2024-0812</td>
+                  <td><div class="mono" style="font-size:11px">1FTFW1ET5EFE55566</div><div class="text-muted" style="font-size:11px">MVR-11377</div></td>
+                  <td style="font-size:12px">Windshield crack · Severe <div class="mono text-muted" style="font-size:10px">BD-WS-CR-5</div></td>
+                  <td style="font-size:12px">Jack Cooper</td>
+                  <td style="font-size:12px">Penske Ford</td>
+                  <td style="font-size:12px">12d</td>
+                  <td><span class="sla-pill sla-ok">✓ On track</span></td>
+                  <td><span class="badge badge-info">Under Review</span></td>
+                  <td style="font-size:12px">L. Chen</td>
+                  <td><button class="btn btn-ghost btn-xs">→</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ CLAIM DETAIL ═══ -->
+      <div class="page" id="page-claim-detail">
+        <div class="breadcrumb">
+          <a onclick="nav('claims')">Claims</a> › <span id="claim-detail-id" class="mono">CLM-2024-0847</span>
+        </div>
+        <div class="page-header">
+          <div>
+            <div class="page-title">Claim <span id="claim-detail-title">CLM-2024-0847</span></div>
+            <div class="page-subtitle" id="claim-detail-sub">Left rear quarter panel dent · 1FTFW1ET5EFB22233 · Garber Ford Detroit</div>
+          </div>
+          <div class="page-actions">
+            <button class="btn btn-secondary btn-sm" onclick="openModal('export-packet-modal')">📦 Export Claim Packet</button>
+            <button class="btn btn-secondary btn-sm">✉ Message</button>
+            <button class="btn btn-danger btn-sm">✕ Deny Claim</button>
+            <button class="btn btn-primary btn-sm">✓ Approve Claim</button>
+          </div>
+        </div>
+        <!-- SLA + status bar -->
+        <div style="display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;align-items:center">
+          <span class="sla-pill sla-breach" style="font-size:13px;padding:6px 12px">⏱ SLA BREACH — 2 days overdue</span>
+          <span class="badge badge-danger" style="font-size:12px;padding:4px 10px">Status: Open</span>
+          <span class="badge badge-neutral">Carrier: Jack Cooper</span>
+          <span class="badge badge-neutral">Dealer: Garber Ford Detroit</span>
+          <span class="badge badge-neutral">Assigned: T. Wallace</span>
+          <button class="btn btn-ghost btn-sm" style="margin-left:auto">⊞ Audit Trail</button>
+        </div>
+        <!-- Workflow steps -->
+        <div class="claim-workflow" style="margin-bottom:20px">
+          <div class="claim-stage"><div class="claim-stage-box active">① Open</div></div>
+          <div class="claim-stage-arrow">→</div>
+          <div class="claim-stage"><div class="claim-stage-box" onclick="">② Acknowledge</div></div>
+          <div class="claim-stage-arrow">→</div>
+          <div class="claim-stage"><div class="claim-stage-box">③ Review</div></div>
+          <div class="claim-stage-arrow">→</div>
+          <div class="claim-stage"><div class="claim-stage-box">④ Decision</div></div>
+          <div class="claim-stage-arrow">→</div>
+          <div class="claim-stage"><div class="claim-stage-box">⑤ Settlement</div></div>
+          <div class="claim-stage-arrow">→</div>
+          <div class="claim-stage"><div class="claim-stage-box">⑥ Close</div></div>
+        </div>
+        <div class="tab-bar" id="claim-tabs">
+          <div class="tab-item active" onclick="switchTab('claim-tabs','claim-tab-',0)">Overview</div>
+          <div class="tab-item" onclick="switchTab('claim-tabs','claim-tab-',1)">Damage Coding</div>
+          <div class="tab-item" onclick="switchTab('claim-tabs','claim-tab-',2)">Custody Timeline</div>
+          <div class="tab-item" onclick="switchTab('claim-tabs','claim-tab-',3)">Evidence</div>
+          <div class="tab-item" onclick="switchTab('claim-tabs','claim-tab-',4)">Communications</div>
+          <div class="tab-item" onclick="switchTab('claim-tabs','claim-tab-',5)">Decision</div>
+          <div class="tab-item" onclick="switchTab('claim-tabs','claim-tab-',6)">Settlement</div>
+          <div class="tab-item" onclick="switchTab('claim-tabs','claim-tab-',7)">Audit Trail</div>
+        </div>
+        <div style="background:var(--c-surface);border:1px solid var(--c-border);border-top:none;border-radius:0 0 var(--radius-lg) var(--radius-lg)">
+          <!-- Overview -->
+          <div class="tab-content active" id="claim-tab-0">
+            <div class="detail-layout">
+              <div>
+                <div class="info-card">
+                  <div class="info-card-title">Claim Details</div>
+                  <div class="info-row"><div class="info-key">Claim #</div><div class="info-val mono">CLM-2024-0847</div></div>
+                  <div class="info-row"><div class="info-key">VIN</div><div class="info-val mono text-accent">1FTFW1ET5EFB22233</div></div>
+                  <div class="info-row"><div class="info-key">Move ID</div><div class="info-val mono">MVR-11398</div></div>
+                  <div class="info-row"><div class="info-key">Date Opened</div><div class="info-val">Dec 4, 2024</div></div>
+                  <div class="info-row"><div class="info-key">Damage Window</div><div class="info-val" style="font-size:11px">Pickup (Dec 2) → Toledo Yard (Dec 4)</div></div>
+                  <div class="info-row"><div class="info-key">Claimed Amount</div><div class="info-val text-danger font-bold">$1,850.00</div></div>
+                  <div class="info-row"><div class="info-key">Opened By</div><div class="info-val">Mike Torres (Dealer)</div></div>
+                </div>
+                <div class="info-card">
+                  <div class="info-card-title">Damage Summary</div>
+                  <div style="padding:10px;background:var(--c-bg);border-radius:var(--radius);margin-bottom:8px">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+                      <div style="font-size:12px;font-weight:600">Left Rear Quarter Panel — Dent</div>
+                      <span class="badge badge-warning">Moderate (3)</span>
+                    </div>
+                    <div class="aiag-code-preview" style="font-size:12px;padding:8px 12px">
+                      <div class="aiag-code-label">AIAG Code</div>
+                      BD-LR-QP-DN-3
+                    </div>
+                    <div style="font-size:11px;color:var(--c-text-secondary);margin-top:6px">Size: ~3" diameter · Inward · No paint break</div>
+                  </div>
+                  <button class="btn btn-secondary btn-sm" onclick="switchTab('claim-tabs','claim-tab-',1)">Edit Damage Codes →</button>
+                </div>
+              </div>
+              <div>
+                <div class="info-card">
+                  <div class="info-card-title">SLA Timers</div>
+                  <div class="info-row"><div class="info-key">Acknowledgement</div><div class="info-val"><span class="sla-pill sla-breach">Overdue 2d</span></div></div>
+                  <div class="info-row"><div class="info-key">First Response</div><div class="info-val"><span class="sla-pill sla-breach">Overdue</span></div></div>
+                  <div class="info-row"><div class="info-key">Decision Target</div><div class="info-val"><span class="sla-pill sla-warn">5d remaining</span></div></div>
+                  <div class="info-row"><div class="info-key">Close Target</div><div class="info-val"><span class="sla-pill sla-warn">9d remaining</span></div></div>
+                </div>
+                <div class="info-card">
+                  <div class="info-card-title">Parties Involved</div>
+                  <div class="info-row"><div class="info-key">OEM</div><div class="info-val">Ford Motor Co.</div></div>
+                  <div class="info-row"><div class="info-key">Dealer</div><div class="info-val">Garber Ford Detroit</div></div>
+                  <div class="info-row"><div class="info-key">Carrier</div><div class="info-val">Jack Cooper Transport</div></div>
+                  <div class="info-row"><div class="info-key">Assigned To</div><div class="info-val">T. Wallace</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Damage Coding -->
+          <div class="tab-content" id="claim-tab-1">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+              <div style="font-size:13px;font-weight:600">1 Damage Line · Coding Completeness: 100%</div>
+              <button class="btn btn-primary btn-sm" onclick="openModal('damage-wizard-modal')">+ Add Damage Line</button>
+            </div>
+            <div style="border:1px solid var(--c-border);border-radius:var(--radius-lg);overflow:hidden;margin-bottom:12px">
+              <div style="padding:12px 16px;background:var(--c-bg);border-bottom:1px solid var(--c-border);display:flex;align-items:center;justify-content:space-between">
+                <div>
+                  <div style="font-size:13px;font-weight:700">Damage Line #1 — Left Rear Quarter Panel · Dent · Moderate</div>
+                  <div class="aiag-code-preview" style="margin-top:6px;display:inline-block;padding:4px 10px;font-size:13px">BD-LR-QP-DN-3</div>
+                </div>
+                <div style="display:flex;gap:8px">
+                  <span class="badge badge-success">Complete</span>
+                  <button class="btn btn-secondary btn-sm" onclick="openModal('damage-wizard-modal')">✏ Edit</button>
+                </div>
+              </div>
+              <div style="padding:12px 16px;display:grid;grid-template-columns:repeat(4,1fr);gap:12px;font-size:12px">
+                <div><div class="text-muted">Area</div><div style="font-weight:600">Left Rear</div></div>
+                <div><div class="text-muted">Panel</div><div style="font-weight:600">Quarter Panel</div></div>
+                <div><div class="text-muted">Type</div><div style="font-weight:600">Dent (DN)</div></div>
+                <div><div class="text-muted">Severity</div><div style="font-weight:600">3 — Moderate</div></div>
+                <div><div class="text-muted">Size</div><div style="font-weight:600">~3" diameter</div></div>
+                <div><div class="text-muted">Direction</div><div style="font-weight:600">Inward</div></div>
+                <div><div class="text-muted">Paint Break</div><div style="font-weight:600">No</div></div>
+                <div><div class="text-muted">QA Flagged</div><div style="font-weight:600">—</div></div>
+              </div>
+              <div style="padding:8px 16px;background:var(--c-bg);border-top:1px solid var(--c-border);font-size:11px;color:var(--c-text-muted)">
+                Coded by: S. Kim · Dec 4, 2024 · Last modified: T. Wallace Dec 5 (severity corrected: 2→3) · <span style="color:var(--c-accent);cursor:pointer" onclick="switchTab('claim-tabs','claim-tab-',7)">View audit trail</span>
+              </div>
+            </div>
+          </div>
+          <!-- Custody Timeline -->
+          <div class="tab-content" id="claim-tab-2">
+            <div style="background:var(--c-warning-bg);border:1px solid #fde68a;border-radius:var(--radius);padding:10px 14px;margin-bottom:16px;font-size:12px">
+              <strong>Detected Damage Window:</strong> Damage was not present at Pickup (Dec 2). Damage was reported at Toledo Yard (Dec 4). <strong>Responsible window: Jack Cooper Transport (Pickup → Yard).</strong>
+            </div>
+            <div class="timeline">
+              <div class="tl-item">
+                <div class="tl-dot"></div>
+                <div class="tl-time">Dec 4, 2024 · 11:30 AM</div>
+                <div class="tl-title" style="color:var(--c-danger)">⚑ Damage Reported at Yard</div>
+                <div class="tl-detail">Toledo Vehicle Distribution Yard — delivery inspection found LR quarter panel dent</div>
+                <div class="tl-party">👤 Sarah Kim · Jack Cooper</div>
+              </div>
+              <div class="tl-item">
+                <div class="tl-dot damage" style="box-shadow:0 0 0 3px rgba(220,38,38,0.2)"></div>
+                <div class="tl-time" style="color:var(--c-danger);font-weight:600">← DAMAGE WINDOW (responsible party)</div>
+                <div style="border:2px dashed var(--c-danger);border-radius:var(--radius);padding:8px 10px;margin-top:4px;font-size:12px;color:var(--c-danger)">
+                  Carrier: Jack Cooper Transport · Driver: James O'Brien · Load: MVR-11398 · Dec 2–4
+                </div>
+              </div>
+              <div class="tl-item">
+                <div class="tl-dot active"></div>
+                <div class="tl-time">Dec 2, 2024 · 6:00 AM</div>
+                <div class="tl-title">✓ Pickup from Origin — No Damage</div>
+                <div class="tl-detail">Dearborn Assembly Plant — pickup inspection: clean</div>
+                <div class="tl-party">👤 Gate Auto · United Road</div>
+              </div>
+            </div>
+          </div>
+          <!-- Evidence -->
+          <div class="tab-content" id="claim-tab-3">
+            <div style="display:flex;justify-content:space-between;margin-bottom:12px">
+              <div style="font-size:13px;font-weight:600">2 files attached</div>
+              <button class="btn btn-secondary btn-sm">+ Upload</button>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border:1px solid var(--c-border);border-radius:var(--radius)">
+                <div style="display:flex;align-items:center;gap:8px"><span>📸</span><div><div style="font-size:12px;font-weight:600">damage_LR_quarter_panel.jpg</div><div style="font-size:11px;color:var(--c-text-muted)">Uploaded Dec 4 by S. Kim · 1.2MB</div></div></div>
+                <button class="btn btn-ghost btn-sm">⬇</button>
+              </div>
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border:1px solid var(--c-border);border-radius:var(--radius)">
+                <div style="display:flex;align-items:center;gap:8px"><span>📄</span><div><div style="font-size:12px;font-weight:600">repair_estimate_garber.pdf</div><div style="font-size:11px;color:var(--c-text-muted)">Uploaded Dec 5 by T. Wallace · $1,850 estimate · 88KB</div></div></div>
+                <button class="btn btn-ghost btn-sm">⬇</button>
+              </div>
+            </div>
+            <div class="upload-zone" style="margin-top:12px">
+              <div style="font-size:20px;margin-bottom:4px">📎</div>
+              Drop files here or <strong>click to upload</strong><br>
+              <span style="font-size:11px">PDF, JPG, PNG up to 20MB</span>
+            </div>
+          </div>
+          <!-- Communications -->
+          <div class="tab-content" id="claim-tab-4">
+            <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:12px">
+              <div style="padding:12px;background:var(--c-bg);border-radius:var(--radius);border:1px solid var(--c-border)">
+                <div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-size:12px;font-weight:600">T. Wallace (Claims Manager)</span><span style="font-size:11px;color:var(--c-text-muted)">Dec 5, 2024 · 10:22 AM</span></div>
+                <div style="font-size:13px">Jack Cooper — please provide driver log and BOL for MVR-11398, Dec 2-4. Damage was reported at Toledo yard. We need your response within 48 hours per SLA.</div>
+              </div>
+              <div style="padding:12px;background:var(--c-accent-light);border-radius:var(--radius);border:1px solid #bfdbfe">
+                <div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-size:12px;font-weight:600">Jack Cooper (Carrier)</span><span style="font-size:11px;color:var(--c-text-muted)">Dec 5, 2024 · 2:14 PM</span></div>
+                <div style="font-size:13px">We are reviewing. Our driver noted no damage at pickup. We'll respond with documentation by EOD Dec 6.</div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Send message to:</label>
+              <div style="display:flex;gap:8px;margin-bottom:8px">
+                <div class="chip selected">Carrier (Jack Cooper)</div>
+                <div class="chip">Dealer (Garber Ford)</div>
+                <div class="chip">Internal Only</div>
+              </div>
+              <textarea class="form-textarea" placeholder="Type your message..."></textarea>
+            </div>
+            <button class="btn btn-primary btn-sm" style="margin-top:8px">Send Message</button>
+          </div>
+          <!-- Decision -->
+          <div class="tab-content" id="claim-tab-5">
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label">Liability Attribution <span class="req">*</span></label>
+                <select class="form-select">
+                  <option>Select...</option>
+                  <option selected>Carrier (Jack Cooper)</option>
+                  <option>OEM / Manufacturer Defect</option>
+                  <option>Dealer</option>
+                  <option>Unknown / Unattributable</option>
+                  <option>Split Liability</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Decision Reason Code</label>
+                <select class="form-select">
+                  <option>Select...</option>
+                  <option selected>CARR-001: Damage occurred in carrier custody (documented)</option>
+                  <option>CARR-002: No origin inspection on file</option>
+                  <option>OEM-001: Pre-existing defect</option>
+                </select>
+              </div>
+              <div class="form-group full">
+                <label class="form-label">Decision Notes</label>
+                <textarea class="form-textarea" placeholder="Document your decision rationale...">Damage window confirmed between pickup (Dec 2, clean inspection) and Toledo yard delivery (Dec 4, damage noted). Jack Cooper is carrier of record for this window. Carrier response pending. Pending response, liability attributed to carrier.</textarea>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Approved Repair Amount</label>
+                <input class="form-input" type="text" value="$1,850.00">
+              </div>
+            </div>
+            <div style="margin-top:16px;display:flex;gap:8px">
+              <button class="btn btn-primary">Save Decision</button>
+              <button class="btn btn-danger">Deny Claim</button>
+              <button class="btn btn-secondary">Request More Info</button>
+            </div>
+          </div>
+          <!-- Settlement -->
+          <div class="tab-content" id="claim-tab-6">
+            <div style="padding:24px;text-align:center;color:var(--c-text-muted)">
+              <div style="font-size:24px;margin-bottom:8px">⏳</div>
+              <div style="font-size:14px;font-weight:600;margin-bottom:4px;color:var(--c-text-secondary)">Decision Required First</div>
+              <div style="font-size:12px">Complete the Decision tab before proceeding to settlement.</div>
+            </div>
+          </div>
+          <!-- Audit Trail -->
+          <div class="tab-content" id="claim-tab-7">
+            <div style="max-width:600px">
+              <div class="audit-item">
+                <div class="audit-time">Dec 5, 2024 · 10:22 AM</div>
+                <div class="audit-body"><div class="audit-action">Damage severity updated: 2 (Minor) → 3 (Moderate)</div><div class="audit-user">By: T. Wallace · Reason: Re-inspection with photos</div></div>
+              </div>
+              <div class="audit-item">
+                <div class="audit-time">Dec 4, 2024 · 11:35 AM</div>
+                <div class="audit-body"><div class="audit-action">Claim created — status: Open</div><div class="audit-user">By: Mike Torres (Dealer) via portal</div></div>
+              </div>
+              <div class="audit-item">
+                <div class="audit-time">Dec 4, 2024 · 11:30 AM</div>
+                <div class="audit-body"><div class="audit-action">Damage line added — BD-LR-QP-DN-2 (LR Quarter Panel Dent)</div><div class="audit-user">By: S. Kim (Yard Inspector)</div></div>
+              </div>
+              <div class="audit-item">
+                <div class="audit-time">Dec 4, 2024 · 11:00 AM</div>
+                <div class="audit-body"><div class="audit-action">Delivery inspection submitted for MVR-11398</div><div class="audit-user">By: Jack Cooper (Carrier) · Toledo Yard</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ EXCEPTIONS ═══ -->
+      <div class="page" id="page-exceptions">
+        <div class="page-header">
+          <div><div class="page-title">Exceptions &amp; Alerts</div><div class="page-subtitle">7 open exceptions · 3 require action</div></div>
+          <div class="page-actions">
+            <button class="btn btn-secondary btn-sm">⚙ Alert Rules</button>
+            <button class="btn btn-secondary btn-sm">⬇ Export</button>
+          </div>
+        </div>
+        <div class="section-card">
+          <div class="filter-bar">
+            <select class="filter-select"><option>All Types</option><option>Late Pickup</option><option>Late Delivery</option><option>Missing POD</option><option>Damage</option><option>SLA Breach</option><option>Missing Event</option></select>
+            <select class="filter-select"><option>All Severity</option><option>Critical</option><option>High</option><option>Medium</option></select>
+            <div class="filter-spacer"></div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Type</th><th>VIN / Move</th><th>Description</th><th>Severity</th><th>Owner</th><th>Due Date</th><th>Status</th><th></th></tr></thead>
+              <tbody>
+                <tr class="clickable">
+                  <td>⏱ SLA Breach</td>
+                  <td><span class="mono text-accent" style="font-size:11px">CLM-2024-0847</span></td>
+                  <td style="font-size:12px">Claim acknowledgement overdue by 2 days</td>
+                  <td><span class="badge badge-danger">Critical</span></td>
+                  <td>T. Wallace</td>
+                  <td class="text-danger" style="font-size:12px;font-weight:600">NOW</td>
+                  <td><span class="badge badge-danger">Open</span></td>
+                  <td><button class="btn btn-ghost btn-xs">→</button></td>
+                </tr>
+                <tr class="clickable">
+                  <td>⚠ Late Delivery</td>
+                  <td><span class="mono text-accent" style="font-size:11px">MVR-11401</span></td>
+                  <td style="font-size:12px">Move 2 days past planned delivery. No update from carrier.</td>
+                  <td><span class="badge badge-warning">High</span></td>
+                  <td>Ops Team</td>
+                  <td style="font-size:12px">Dec 11</td>
+                  <td><span class="badge badge-warning">Open</span></td>
+                  <td><button class="btn btn-ghost btn-xs">→</button></td>
+                </tr>
+                <tr class="clickable">
+                  <td>📄 Missing POD</td>
+                  <td><span class="mono text-accent" style="font-size:11px">MVR-11398</span></td>
+                  <td style="font-size:12px">Proof of delivery not uploaded 24h+ after delivery timestamp</td>
+                  <td><span class="badge badge-warning">High</span></td>
+                  <td>Jack Cooper</td>
+                  <td style="font-size:12px">Dec 11</td>
+                  <td><span class="badge badge-warning">Open</span></td>
+                  <td><button class="btn btn-ghost btn-xs">→</button></td>
+                </tr>
+                <tr class="clickable">
+                  <td>⚑ Damage</td>
+                  <td><span class="mono text-accent" style="font-size:11px">1FTFW1ET5EFB22233</span></td>
+                  <td style="font-size:12px">New damage reported at delivery — claim pending review</td>
+                  <td><span class="badge badge-danger">High</span></td>
+                  <td>T. Wallace</td>
+                  <td style="font-size:12px">Dec 12</td>
+                  <td><span class="badge badge-info">In Review</span></td>
+                  <td><button class="btn btn-ghost btn-xs">→</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ REPORTS ═══ -->
+      <div class="page" id="page-reports">
+        <div class="page-header">
+          <div><div class="page-title">Reports &amp; Analytics</div><div class="page-subtitle">Claims KPIs · Operational metrics · Drill-down analysis</div></div>
+          <div class="page-actions">
+            <select class="filter-select" style="height:34px">
+              <option>Last 30 days</option><option>Last 90 days</option><option>YTD</option><option>Custom range</option>
+            </select>
+            <button class="btn btn-secondary btn-sm">⬇ Export PDF</button>
+            <button class="btn btn-secondary btn-sm">⬇ Export CSV</button>
+            <button class="btn btn-secondary btn-sm">⊞ Save View</button>
+          </div>
+        </div>
+        <!-- Claims KPI tiles -->
+        <div class="kpi-grid">
+          <div class="kpi-card danger"><div class="kpi-label">Damage Ratio</div><div class="kpi-value">2.4</div><div class="kpi-sub">per 100 vehicles</div></div>
+          <div class="kpi-card warning"><div class="kpi-label">Claim Rate</div><div class="kpi-value">1.1</div><div class="kpi-sub">per 100 vehicles</div></div>
+          <div class="kpi-card accent"><div class="kpi-label">Avg Cycle Time</div><div class="kpi-value">6.8d</div><div class="kpi-sub">open → close</div></div>
+          <div class="kpi-card purple"><div class="kpi-label">SLA Breach Rate</div><div class="kpi-value">8.3%</div><div class="kpi-sub">vs 5% target</div></div>
+          <div class="kpi-card success"><div class="kpi-label">Code Compliance</div><div class="kpi-value">91%</div><div class="kpi-sub">complete AIAG</div></div>
+          <div class="kpi-card"><div class="kpi-label">On-Time Delivery</div><div class="kpi-value">94.1%</div><div class="kpi-sub">vs 96% target</div></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+          <!-- Top lanes -->
+          <div class="section-card">
+            <div class="section-card-header">
+              <div class="section-card-title">Damage by Lane (Top 5)</div>
+              <select class="filter-select" style="height:26px;font-size:11px"><option>Damage Rate</option><option>Volume</option></select>
+            </div>
+            <div class="bar-chart">
+              <div class="bar-row"><div class="bar-label" style="font-size:10px">Dearborn→Detroit</div><div class="bar-track"><div class="bar-fill" style="width:80%;background:var(--c-danger)">4.1%</div></div><div class="bar-val">4.1%</div></div>
+              <div class="bar-row"><div class="bar-label" style="font-size:10px">Toledo→Cleveland</div><div class="bar-track"><div class="bar-fill" style="width:55%;background:var(--c-warning)">2.8%</div></div><div class="bar-val">2.8%</div></div>
+              <div class="bar-row"><div class="bar-label" style="font-size:10px">Louisville→Indy</div><div class="bar-track"><div class="bar-fill" style="width:42%;background:var(--c-accent)">2.2%</div></div><div class="bar-val">2.2%</div></div>
+              <div class="bar-row"><div class="bar-label" style="font-size:10px">Chicago Port</div><div class="bar-track"><div class="bar-fill" style="width:28%;background:#0891b2">1.4%</div></div><div class="bar-val">1.4%</div></div>
+              <div class="bar-row"><div class="bar-label" style="font-size:10px">Dearborn→Lans.</div><div class="bar-track"><div class="bar-fill" style="width:18%;background:var(--c-success)">0.9%</div></div><div class="bar-val">0.9%</div></div>
+            </div>
+          </div>
+          <!-- Carrier scorecard -->
+          <div class="section-card">
+            <div class="section-card-header">
+              <div class="section-card-title">Carrier Damage Scorecard</div>
+              <button class="btn btn-ghost btn-sm">Full report →</button>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Carrier</th><th>Moves</th><th>Dmg Rate</th><th>SLA %</th><th>Score</th></tr></thead>
+                <tbody>
+                  <tr><td>Jack Cooper</td><td>142</td><td class="text-danger">3.2%</td><td>91%</td><td><span class="badge badge-warning">B</span></td></tr>
+                  <tr><td>Allied Transport</td><td>98</td><td class="text-success">0.8%</td><td>98%</td><td><span class="badge badge-success">A+</span></td></tr>
+                  <tr><td>United Road</td><td>76</td><td>1.9%</td><td>95%</td><td><span class="badge badge-info">A</span></td></tr>
+                  <tr><td>AutoInfo</td><td>44</td><td class="text-warning">2.6%</td><td>88%</td><td><span class="badge badge-warning">B-</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <!-- Drill-down section -->
+        <div class="section-card" style="margin-top:20px">
+          <div class="section-card-header">
+            <div class="section-card-title">Claim Cycle Time Trend (12 weeks)</div>
+            <div style="display:flex;gap:8px">
+              <select class="filter-select" style="height:26px;font-size:11px"><option>All Carriers</option><option>Jack Cooper</option></select>
+              <button class="btn btn-ghost btn-sm">Configure</button>
+            </div>
+          </div>
+          <div style="padding:16px 18px;display:flex;align-items:flex-end;gap:6px;height:120px">
+            <!-- Simple CSS bar chart for cycle time -->
+            <div style="flex:1;display:flex;align-items:flex-end;gap:4px;height:100%">
+              <div style="flex:1;background:var(--c-accent);opacity:0.7;height:60%" title="W1: 5.2d"></div>
+              <div style="flex:1;background:var(--c-accent);opacity:0.7;height:55%" title="W2: 4.8d"></div>
+              <div style="flex:1;background:var(--c-accent);opacity:0.75;height:65%" title="W3: 5.6d"></div>
+              <div style="flex:1;background:var(--c-accent);opacity:0.7;height:70%" title="W4: 6.1d"></div>
+              <div style="flex:1;background:var(--c-warning);opacity:0.8;height:80%" title="W5: 6.9d"></div>
+              <div style="flex:1;background:var(--c-warning);opacity:0.8;height:75%" title="W6: 6.5d"></div>
+              <div style="flex:1;background:var(--c-warning);opacity:0.8;height:85%" title="W7: 7.4d"></div>
+              <div style="flex:1;background:var(--c-danger);opacity:0.85;height:90%" title="W8: 7.8d"></div>
+              <div style="flex:1;background:var(--c-danger);opacity:0.85;height:95%" title="W9: 8.2d"></div>
+              <div style="flex:1;background:var(--c-danger);opacity:0.9;height:88%" title="W10: 7.6d"></div>
+              <div style="flex:1;background:var(--c-warning);opacity:0.8;height:82%" title="W11: 7.1d"></div>
+              <div style="flex:1;background:var(--c-warning);opacity:0.8;height:78%" title="W12: 6.8d"></div>
+            </div>
+          </div>
+          <div style="padding:0 18px 12px;display:flex;justify-content:space-between;font-size:10px;color:var(--c-text-muted)">
+            <span>Week 1</span><span>Week 4</span><span>Week 7</span><span>Week 10</span><span>Week 12</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ DOCUMENTS ═══ -->
+      <div class="page" id="page-documents">
+        <div class="page-header">
+          <div><div class="page-title">Documents</div><div class="page-subtitle">PODs, claim packets, BOLs, inspection reports</div></div>
+          <div class="page-actions">
+            <button class="btn btn-secondary btn-sm">+ Upload</button>
+            <button class="btn btn-primary btn-sm" onclick="openModal('export-packet-modal')">📦 Generate Claim Packet</button>
+          </div>
+        </div>
+        <div class="section-card">
+          <div class="filter-bar">
+            <select class="filter-select"><option>All Types</option><option>POD</option><option>Claim Packet</option><option>BOL</option><option>Inspection</option><option>Repair Estimate</option></select>
+            <select class="filter-select"><option>All VINs</option></select>
+            <input class="filter-input" placeholder="Search filename...">
+            <div class="filter-spacer"></div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Filename</th><th>Type</th><th>VIN / Claim</th><th>Uploaded By</th><th>Date</th><th>Size</th><th></th></tr></thead>
+              <tbody>
+                <tr class="clickable"><td>POD_MVR11422_Delivery.pdf</td><td><span class="badge badge-info">POD</span></td><td class="mono text-muted" style="font-size:11px">1FTFW1ET5EFA12345</td><td>Allied Transport</td><td>Dec 10</td><td>244KB</td><td><button class="btn btn-ghost btn-xs">⬇</button></td></tr>
+                <tr class="clickable"><td>ClaimPacket_CLM-0847.pdf</td><td><span class="badge badge-purple">Claim Packet</span></td><td class="mono text-muted" style="font-size:11px">CLM-2024-0847</td><td>T. Wallace</td><td>Dec 5</td><td>1.4MB</td><td><button class="btn btn-ghost btn-xs">⬇</button></td></tr>
+                <tr class="clickable"><td>Inspection_Pickup_Dec2.pdf</td><td><span class="badge badge-neutral">Inspection</span></td><td class="mono text-muted" style="font-size:11px">1FTFW1ET5EFA12345</td><td>United Road</td><td>Dec 2</td><td>88KB</td><td><button class="btn btn-ghost btn-xs">⬇</button></td></tr>
+                <tr class="clickable"><td>repair_estimate_garber.pdf</td><td><span class="badge badge-warning">Repair Est.</span></td><td class="mono text-muted" style="font-size:11px">CLM-2024-0847</td><td>T. Wallace</td><td>Dec 5</td><td>88KB</td><td><button class="btn btn-ghost btn-xs">⬇</button></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ ADMIN ═══ -->
+      <div class="page" id="page-admin">
+        <div class="page-header">
+          <div><div class="page-title">Admin &amp; Settings</div><div class="page-subtitle">User management, claim rules, workflow configuration</div></div>
+        </div>
+        <div class="tab-bar" id="admin-tabs">
+          <div class="tab-item active" onclick="switchTab('admin-tabs','admin-tab-',0)">Users &amp; Roles</div>
+          <div class="tab-item" onclick="switchTab('admin-tabs','admin-tab-',1)">Dealers</div>
+          <div class="tab-item" onclick="switchTab('admin-tabs','admin-tab-',2)">Claim Workflow</div>
+          <div class="tab-item" onclick="switchTab('admin-tabs','admin-tab-',3)">Damage Codes</div>
+          <div class="tab-item" onclick="switchTab('admin-tabs','admin-tab-',4)">Notifications</div>
+          <div class="tab-item" onclick="switchTab('admin-tabs','admin-tab-',5)">Branding</div>
+        </div>
+        <div style="background:var(--c-surface);border:1px solid var(--c-border);border-top:none;border-radius:0 0 var(--radius-lg) var(--radius-lg)">
+          <!-- Users & Roles -->
+          <div class="tab-content active" id="admin-tab-0">
+            <div style="display:flex;justify-content:space-between;margin-bottom:16px">
+              <div style="font-size:13px;font-weight:600">8 users across this account</div>
+              <button class="btn btn-primary btn-sm">+ Invite User</button>
+            </div>
+            <table>
+              <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Last Active</th><th>Status</th><th></th></tr></thead>
+              <tbody>
+                <tr><td>Jessica Miller</td><td>j.miller@fordmotor.com</td><td><span class="badge badge-info">OEM Admin</span></td><td>Now</td><td><span class="badge badge-success">Active</span></td><td><button class="btn btn-ghost btn-xs">Edit</button></td></tr>
+                <tr><td>Tony Wallace</td><td>t.wallace@fordmotor.com</td><td><span class="badge badge-purple">Claims Analyst</span></td><td>1h ago</td><td><span class="badge badge-success">Active</span></td><td><button class="btn btn-ghost btn-xs">Edit</button></td></tr>
+                <tr><td>Linda Chen</td><td>l.chen@fordmotor.com</td><td><span class="badge badge-purple">Claims Analyst</span></td><td>3h ago</td><td><span class="badge badge-success">Active</span></td><td><button class="btn btn-ghost btn-xs">Edit</button></td></tr>
+                <tr><td>Mike Torres</td><td>m.torres@garberford.com</td><td><span class="badge badge-success">Dealer Admin</span></td><td>Yesterday</td><td><span class="badge badge-success">Active</span></td><td><button class="btn btn-ghost btn-xs">Edit</button></td></tr>
+                <tr><td>Sarah Kim</td><td>s.kim@backhaulDirect.com</td><td><span class="badge badge-warning">Internal Ops</span></td><td>2h ago</td><td><span class="badge badge-success">Active</span></td><td><button class="btn btn-ghost btn-xs">Edit</button></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <!-- Dealers -->
+          <div class="tab-content" id="admin-tab-1">
+            <div style="display:flex;justify-content:space-between;margin-bottom:16px">
+              <div style="font-size:13px;font-weight:600">42 dealer accounts under Ford Motor Co.</div>
+              <button class="btn btn-primary btn-sm">+ Add Dealer</button>
+            </div>
+            <table>
+              <thead><tr><th>Dealer Name</th><th>Location</th><th>Users</th><th>Active Vehicles</th><th>Open Claims</th><th>Status</th><th></th></tr></thead>
+              <tbody>
+                <tr><td>Garber Ford Detroit</td><td>Detroit, MI</td><td>3</td><td>18</td><td>2</td><td><span class="badge badge-success">Active</span></td><td><button class="btn btn-ghost btn-xs">Edit</button></td></tr>
+                <tr><td>Serra Ford</td><td>Grand Blanc, MI</td><td>2</td><td>11</td><td>1</td><td><span class="badge badge-success">Active</span></td><td><button class="btn btn-ghost btn-xs">Edit</button></td></tr>
+                <tr><td>AutoNation Ford</td><td>Columbus, OH</td><td>4</td><td>24</td><td>1</td><td><span class="badge badge-success">Active</span></td><td><button class="btn btn-ghost btn-xs">Edit</button></td></tr>
+                <tr><td>Penske Ford</td><td>Chicago, IL</td><td>2</td><td>9</td><td>0</td><td><span class="badge badge-success">Active</span></td><td><button class="btn btn-ghost btn-xs">Edit</button></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <!-- Claim Workflow -->
+          <div class="tab-content" id="admin-tab-2">
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label">Acknowledgement SLA (hours)</label>
+                <input class="form-input" type="number" value="24">
+              </div>
+              <div class="form-group">
+                <label class="form-label">First Response SLA (hours)</label>
+                <input class="form-input" type="number" value="48">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Decision SLA (days)</label>
+                <input class="form-input" type="number" value="10">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Close SLA (days)</label>
+                <input class="form-input" type="number" value="30">
+              </div>
+              <div class="form-group full">
+                <label class="form-label">AIAG Code Enforcement Mode</label>
+                <div class="chip-select">
+                  <div class="chip selected">Strict (OEM) — all fields required</div>
+                  <div class="chip">Standard</div>
+                  <div class="chip">Dealer-simplified</div>
+                </div>
+              </div>
+              <div class="form-group full">
+                <label class="form-label">Evidence Policy</label>
+                <div class="chip-select">
+                  <div class="chip">Required</div>
+                  <div class="chip selected">Optional</div>
+                  <div class="chip">Disabled</div>
+                </div>
+              </div>
+            </div>
+            <button class="btn btn-primary" style="margin-top:16px">Save Settings</button>
+          </div>
+          <!-- Damage Codes -->
+          <div class="tab-content" id="admin-tab-3">
+            <div style="font-size:13px;font-weight:600;margin-bottom:16px">Damage Type Library &amp; Severity Scale</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+              <div class="info-card">
+                <div class="info-card-title">Damage Types</div>
+                <div style="display:flex;flex-direction:column;gap:6px">
+                  <div style="display:flex;justify-content:space-between;align-items:center;font-size:12px"><span>SC — Scratch</span><div class="chip selected" style="font-size:10px">Active</div></div>
+                  <div style="display:flex;justify-content:space-between;align-items:center;font-size:12px"><span>DN — Dent</span><div class="chip selected" style="font-size:10px">Active</div></div>
+                  <div style="display:flex;justify-content:space-between;align-items:center;font-size:12px"><span>CP — Chip</span><div class="chip selected" style="font-size:10px">Active</div></div>
+                  <div style="display:flex;justify-content:space-between;align-items:center;font-size:12px"><span>CR — Crack</span><div class="chip selected" style="font-size:10px">Active</div></div>
+                  <div style="display:flex;justify-content:space-between;align-items:center;font-size:12px"><span>BR — Broken</span><div class="chip selected" style="font-size:10px">Active</div></div>
+                  <div style="display:flex;justify-content:space-between;align-items:center;font-size:12px"><span>BN — Bent</span><div class="chip selected" style="font-size:10px">Active</div></div>
+                  <div style="display:flex;justify-content:space-between;align-items:center;font-size:12px"><span>MS — Missing</span><div class="chip selected" style="font-size:10px">Active</div></div>
+                  <div style="display:flex;justify-content:space-between;align-items:center;font-size:12px"><span>OT — Other/Unknown</span><div class="chip" style="font-size:10px;color:var(--c-warning)">QA Flag</div></div>
+                </div>
+                <button class="btn btn-secondary btn-sm" style="margin-top:12px">+ Add Type</button>
+              </div>
+              <div class="info-card">
+                <div class="info-card-title">Severity Scale (1–5)</div>
+                <div style="display:flex;flex-direction:column;gap:8px">
+                  <div style="padding:6px 10px;background:#dcfce7;border-radius:var(--radius);font-size:12px;font-weight:600;color:var(--c-success)">1 — Minimal (cosmetic only)</div>
+                  <div style="padding:6px 10px;background:#fef9c3;border-radius:var(--radius);font-size:12px;font-weight:600;color:#a16207">2 — Minor (&lt;2" / no paint break)</div>
+                  <div style="padding:6px 10px;background:#fed7aa;border-radius:var(--radius);font-size:12px;font-weight:600;color:var(--c-orange)">3 — Moderate (visible, paintwork)</div>
+                  <div style="padding:6px 10px;background:#fee2e2;border-radius:var(--radius);font-size:12px;font-weight:600;color:var(--c-danger)">4 — Major (structural/safety)</div>
+                  <div style="padding:6px 10px;background:#fca5a5;border-radius:var(--radius);font-size:12px;font-weight:600;color:#991b1b">5 — Severe (non-drivable)</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Notifications -->
+          <div class="tab-content" id="admin-tab-4">
+            <div style="font-size:13px;font-weight:600;margin-bottom:16px">Alert Rules</div>
+            <table>
+              <thead><tr><th>Event</th><th>Channel</th><th>Recipient</th><th>Threshold</th><th>Active</th></tr></thead>
+              <tbody>
+                <tr><td>Claim SLA breach</td><td>Email + In-app</td><td>Claims Analyst, OEM Admin</td><td>At breach</td><td><input type="checkbox" checked></td></tr>
+                <tr><td>New damage reported</td><td>Email + In-app</td><td>OEM Admin, Claims Analyst</td><td>Immediate</td><td><input type="checkbox" checked></td></tr>
+                <tr><td>Late delivery</td><td>In-app</td><td>Ops Team</td><td>24h past ETA</td><td><input type="checkbox" checked></td></tr>
+                <tr><td>Missing POD</td><td>In-app</td><td>Ops Team</td><td>24h post delivery</td><td><input type="checkbox" checked></td></tr>
+                <tr><td>Claim opened (dealer)</td><td>Email</td><td>OEM Claims Analyst</td><td>Immediate</td><td><input type="checkbox" checked></td></tr>
+                <tr><td>Coding compliance &lt;85%</td><td>Email</td><td>OEM Admin</td><td>Weekly</td><td><input type="checkbox"></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <!-- Branding -->
+          <div class="tab-content" id="admin-tab-5">
+            <div class="form-grid" style="max-width:500px">
+              <div class="form-group">
+                <label class="form-label">Customer Logo URL</label>
+                <input class="form-input" placeholder="https://...">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Accent Color</label>
+                <input class="form-input" type="color" value="#1d4ed8" style="padding:2px">
+              </div>
+              <div class="form-group full">
+                <label class="form-label">Portal Display Name</label>
+                <input class="form-input" value="Ford Motor Co. — FVL Portal">
+              </div>
+            </div>
+            <button class="btn btn-primary" style="margin-top:8px">Save Branding</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ INTEGRATIONS ═══ -->
+      <div class="page" id="page-integrations">
+        <div class="page-header">
+          <div><div class="page-title">Integration Settings</div><div class="page-subtitle">External system connections and sync status</div></div>
+        </div>
+        <div class="section-card" style="margin-bottom:20px">
+          <div class="section-card-header"><div class="section-card-title">Connected Systems</div></div>
+          <div class="integration-row">
+            <div><div class="int-name">Super Dispatch (Execution Rail)</div><div style="font-size:12px;color:var(--c-text-secondary)">Order/status sync · Last sync: 4 min ago</div></div>
+            <div style="display:flex;align-items:center;gap:12px">
+              <div class="int-status"><div class="int-dot int-dot-green"></div>Connected</div>
+              <button class="btn btn-secondary btn-sm">🔄 Refresh</button>
+              <button class="btn btn-secondary btn-sm">⚙ Configure</button>
+            </div>
+          </div>
+          <div class="integration-row">
+            <div><div class="int-name">Grapevine TMS</div><div style="font-size:12px;color:var(--c-text-secondary)">Load export / move creation · Last sync: 12 min ago</div></div>
+            <div style="display:flex;align-items:center;gap:12px">
+              <div class="int-status"><div class="int-dot int-dot-green"></div>Connected</div>
+              <button class="btn btn-secondary btn-sm">🔄 Refresh</button>
+              <button class="btn btn-secondary btn-sm">⚙ Configure</button>
+            </div>
+          </div>
+          <div class="integration-row">
+            <div><div class="int-name">OEM Warranty System (Placeholder)</div><div style="font-size:12px;color:var(--c-text-secondary)">Claim packet push · Not yet configured</div></div>
+            <div style="display:flex;align-items:center;gap:12px">
+              <div class="int-status"><div class="int-dot int-dot-gray"></div>Disconnected</div>
+              <button class="btn btn-primary btn-sm">Connect</button>
+            </div>
+          </div>
+        </div>
+        <div class="section-card">
+          <div class="section-card-header"><div class="section-card-title">Event Ingestion Settings (Super Dispatch)</div></div>
+          <div style="padding:16px 18px">
+            <table>
+              <thead><tr><th>Event Type</th><th>Accept from API</th><th>Auto-create in Portal</th><th>Require Confirmation</th></tr></thead>
+              <tbody>
+                <tr><td>Pickup</td><td><input type="checkbox" checked></td><td><input type="checkbox" checked></td><td><input type="checkbox"></td></tr>
+                <tr><td>Delivery</td><td><input type="checkbox" checked></td><td><input type="checkbox" checked></td><td><input type="checkbox" checked></td></tr>
+                <tr><td>Yard In/Out</td><td><input type="checkbox" checked></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
+                <tr><td>Inspection</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox" checked></td></tr>
+              </tbody>
+            </table>
+            <div style="margin-top:16px;padding:12px;background:var(--c-bg);border-radius:var(--radius);font-size:12px;color:var(--c-text-secondary)">
+              <strong>Webhook URL (future):</strong> <span class="mono">https://portal.backhaulDirect.com/api/webhook/superdispatch</span> — <span class="badge badge-neutral">Placeholder</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /content -->
+  </div><!-- /main -->
+</div><!-- /app -->
+
+<!-- ╔═══════════════════════════════════════╗ -->
+<!-- ║              MODALS                   ║ -->
+<!-- ╚═══════════════════════════════════════╝ -->
+
+<!-- NOTIFICATIONS MODAL -->
+<div class="modal-overlay" id="notif-modal">
+  <div class="modal" style="max-width:420px">
+    <div class="modal-header">
+      <div class="modal-title">Notifications</div>
+      <button class="modal-close" onclick="closeModal('notif-modal')">✕</button>
+    </div>
+    <div style="max-height:480px;overflow-y:auto">
+      <div class="notif-item">
+        <div class="notif-dot" style="background:var(--c-danger)"></div>
+        <div class="notif-body"><div class="notif-title">SLA Breach — CLM-2024-0847</div><div class="notif-sub">Acknowledgement overdue by 2 days. Action required.</div></div>
+        <div class="notif-time">4m ago</div>
+      </div>
+      <div class="notif-item">
+        <div class="notif-dot" style="background:var(--c-warning)"></div>
+        <div class="notif-body"><div class="notif-title">New Damage Reported</div><div class="notif-sub">1FTFW1ET5EFB22233 — LR quarter panel dent at Toledo Yard</div></div>
+        <div class="notif-time">38m ago</div>
+      </div>
+      <div class="notif-item">
+        <div class="notif-dot" style="background:var(--c-accent)"></div>
+        <div class="notif-body"><div class="notif-title">Move MVR-11422 Delivered</div><div class="notif-sub">9 units delivered to Garber Ford Detroit. POD uploaded.</div></div>
+        <div class="notif-time">1h ago</div>
+      </div>
+      <div class="notif-item">
+        <div class="notif-dot" style="background:var(--c-text-muted)"></div>
+        <div class="notif-body"><div class="notif-title">Carrier Response — CLM-2024-0839</div><div class="notif-sub">United Road provided BOL and driver notes.</div></div>
+        <div class="notif-time">2h ago</div>
+      </div>
+      <div class="notif-item">
+        <div class="notif-dot" style="background:var(--c-text-muted)"></div>
+        <div class="notif-body"><div class="notif-title">Missing POD — MVR-11398</div><div class="notif-sub">POD not uploaded 24h+ post delivery. Carrier notified.</div></div>
+        <div class="notif-time">3h ago</div>
+      </div>
+    </div>
+    <div class="modal-footer" style="justify-content:space-between">
+      <button class="btn btn-ghost btn-sm">Mark all read</button>
+      <button class="btn btn-secondary btn-sm" onclick="closeModal('notif-modal')">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD EVENT MODAL -->
+<div class="modal-overlay" id="add-event-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Add Custody Event</div>
+      <button class="modal-close" onclick="closeModal('add-event-modal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">VIN <span class="req">*</span></label>
+          <input class="form-input" placeholder="Enter or scan VIN" value="1FTFW1ET5EFB22233">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Move ID</label>
+          <input class="form-input" placeholder="MVR-XXXXX" value="MVR-11398">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Event Type <span class="req">*</span></label>
+          <select class="form-select">
+            <option>Select...</option>
+            <option>Pickup</option>
+            <option>Yard-In</option>
+            <option>Yard-Out</option>
+            <option>Rail Ramp Arrival</option>
+            <option>Rail Ramp Departure</option>
+            <option>Port Arrival</option>
+            <option>Port Departure</option>
+            <option selected>Delivery</option>
+            <option>Interchange</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Timestamp <span class="req">*</span></label>
+          <input class="form-input" type="datetime-local" value="2024-12-10T09:14">
+        </div>
+        <div class="form-group full">
+          <label class="form-label">Location <span class="req">*</span></label>
+          <input class="form-input" placeholder="Facility name, city, state" value="Garber Ford Detroit, 4540 Woodward Ave, Detroit MI">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Responsible Party</label>
+          <select class="form-select"><option>Allied Transport</option><option>Jack Cooper</option><option>United Road</option></select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Inspector / Contact</label>
+          <input class="form-input" placeholder="Name or ID">
+        </div>
+        <div class="form-group full">
+          <label class="form-label">Notes</label>
+          <textarea class="form-textarea" placeholder="Optional notes..."></textarea>
+        </div>
+      </div>
+      <div style="margin-top:12px;padding:10px;background:var(--c-bg);border-radius:var(--radius);font-size:12px;color:var(--c-text-secondary)">
+        💡 After saving, you can add an inspection and damage report to this event.
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('add-event-modal')">Cancel</button>
+      <button class="btn btn-secondary" onclick="closeModal('add-event-modal');openModal('add-inspection-modal')">Save &amp; Add Inspection</button>
+      <button class="btn btn-primary" onclick="closeModal('add-event-modal')">Save Event</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD INSPECTION MODAL -->
+<div class="modal-overlay" id="add-inspection-modal">
+  <div class="modal modal-lg">
+    <div class="modal-header">
+      <div class="modal-title">Add Inspection</div>
+      <button class="modal-close" onclick="closeModal('add-inspection-modal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid" style="margin-bottom:16px">
+        <div class="form-group">
+          <label class="form-label">VIN</label>
+          <input class="form-input" value="1FTFW1ET5EFB22233">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Inspection Type <span class="req">*</span></label>
+          <select class="form-select"><option>Pickup</option><option selected>Delivery</option><option>Interchange</option></select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Inspector Name</label>
+          <input class="form-input" placeholder="Name" value="Derek Lane">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Method</label>
+          <select class="form-select"><option>Visual / Walk-around</option><option>Electronic (tablet)</option><option>Super Dispatch integration</option></select>
+        </div>
+      </div>
+      <div style="background:var(--c-bg);border-radius:var(--radius-lg);padding:16px;margin-bottom:12px">
+        <div style="font-size:13px;font-weight:700;margin-bottom:12px">Damage Status <span class="req">*</span></div>
+        <div style="display:flex;gap:10px">
+          <div class="action-card" id="no-dmg-btn" onclick="selectDamageStatus('none')" style="flex:1;padding:14px;border-color:var(--c-success);background:var(--c-success-bg)">
+            <div class="action-card-icon">✅</div>
+            <div class="action-card-title" style="font-size:13px;color:var(--c-success)">No Damage</div>
+            <div class="action-card-desc">Vehicle received in clean condition</div>
+          </div>
+          <div class="action-card" id="dmg-btn" onclick="selectDamageStatus('damage');openModal('damage-wizard-modal')" style="flex:1;padding:14px">
+            <div class="action-card-icon">⚠️</div>
+            <div class="action-card-title" style="font-size:13px;color:var(--c-danger)">Add Damage</div>
+            <div class="action-card-desc">Open AIAG damage coding tool</div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group" style="margin-bottom:12px">
+        <label class="form-label">Notes</label>
+        <textarea class="form-textarea" placeholder="Additional notes..."></textarea>
+      </div>
+      <div class="upload-zone">
+        📎 Upload photos or POD (optional)
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('add-inspection-modal')">Cancel</button>
+      <button class="btn btn-primary" onclick="closeModal('add-inspection-modal')">Submit Inspection</button>
+    </div>
+  </div>
+</div>
+
+<!-- DAMAGE WIZARD MODAL -->
+<div class="modal-overlay" id="damage-wizard-modal">
+  <div class="modal modal-lg">
+    <div class="modal-header">
+      <div class="modal-title">AIAG Damage Entry</div>
+      <button class="modal-close" onclick="closeModal('damage-wizard-modal')">✕</button>
+    </div>
+    <div class="modal-body" id="dmg-wizard-body">
+      <!-- STEP INDICATOR -->
+      <div class="dmg-steps">
+        <div class="dmg-step active" id="dmg-step-0" onclick="goDmgStep(0)"><div class="dmg-step-num">1</div>Location/Area</div>
+        <div class="dmg-step" id="dmg-step-1" onclick="goDmgStep(1)"><div class="dmg-step-num">2</div>Damage Type</div>
+        <div class="dmg-step" id="dmg-step-2" onclick="goDmgStep(2)"><div class="dmg-step-num">3</div>Severity</div>
+        <div class="dmg-step" id="dmg-step-3" onclick="goDmgStep(3)"><div class="dmg-step-num">4</div>Details</div>
+        <div class="dmg-step" id="dmg-step-4" onclick="goDmgStep(4)"><div class="dmg-step-num">5</div>Review</div>
+      </div>
+
+      <!-- STEP 1: Location -->
+      <div id="dmg-content-0">
+        <div style="font-size:13px;font-weight:600;margin-bottom:12px">Step 1: Select Damage Location &amp; Panel</div>
+        <!-- Vehicle Diagram (SVG-based splat chart) -->
+        <div class="vehicle-diagram" style="margin-bottom:16px">
+          <svg class="veh-svg" viewBox="0 0 500 220" xmlns="http://www.w3.org/2000/svg">
+            <!-- Vehicle body outline -->
+            <rect x="60" y="80" width="380" height="100" rx="12" fill="#f1f0ec" stroke="#c8c4b8" stroke-width="2"/>
+            <!-- Hood -->
+            <rect class="veh-zone" id="zone-hood" x="60" y="80" width="100" height="100" rx="8" onclick="selectZone('FH','Front Hood')" title="Front Hood"/>
+            <!-- Roof -->
+            <rect class="veh-zone" id="zone-roof" x="160" y="60" width="180" height="80" rx="8" onclick="selectZone('RO','Roof')"/>
+            <!-- Trunk -->
+            <rect class="veh-zone" id="zone-trunk" x="340" y="80" width="100" height="100" rx="8" onclick="selectZone('RK','Trunk/Tailgate')"/>
+            <!-- Left side (bottom zone) -->
+            <rect class="veh-zone" id="zone-left" x="60" y="155" width="380" height="25" rx="4" onclick="selectZone('LF','Left Front Door / Quarter Panel')"/>
+            <!-- Windshield area -->
+            <rect class="veh-zone" id="zone-ws" x="155" y="55" width="90" height="30" rx="4" onclick="selectZone('WS','Windshield')" fill="#dbeafe" stroke="#bfdbfe"/>
+            <!-- Rear glass -->
+            <rect class="veh-zone" id="zone-rg" x="255" y="55" width="90" height="30" rx="4" onclick="selectZone('RG','Rear Glass')" fill="#dbeafe" stroke="#bfdbfe"/>
+            <!-- Labels -->
+            <text x="110" y="136" text-anchor="middle" font-size="10" fill="#6b6760" font-family="IBM Plex Sans">HOOD</text>
+            <text x="250" y="105" text-anchor="middle" font-size="10" fill="#6b6760" font-family="IBM Plex Sans">ROOF</text>
+            <text x="390" y="136" text-anchor="middle" font-size="10" fill="#6b6760" font-family="IBM Plex Sans">TRUNK</text>
+            <text x="250" y="172" text-anchor="middle" font-size="10" fill="#6b6760" font-family="IBM Plex Sans">DOORS / SIDE PANELS</text>
+            <text x="200" y="74" text-anchor="middle" font-size="9" fill="#3b82f6" font-family="IBM Plex Sans">W/S</text>
+            <text x="300" y="74" text-anchor="middle" font-size="9" fill="#3b82f6" font-family="IBM Plex Sans">R/G</text>
+          </svg>
+          <div style="text-align:center;font-size:11px;color:var(--c-text-muted);margin-top:6px">Click a zone on the diagram to select damage location</div>
+        </div>
+        <!-- Or use structured selection -->
+        <div style="font-size:12px;font-weight:600;margin-bottom:8px;color:var(--c-text-secondary)">Or select from structured list:</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <div>
+            <div style="font-size:11px;font-weight:600;color:var(--c-text-muted);margin-bottom:6px;text-transform:uppercase">Side</div>
+            <div class="dmg-grid" style="grid-template-columns:1fr 1fr">
+              <div class="dmg-chip" id="side-FL" onclick="selectSide('FL','Front Left')">Front Left</div>
+              <div class="dmg-chip" id="side-FR" onclick="selectSide('FR','Front Right')">Front Right</div>
+              <div class="dmg-chip" id="side-RL" onclick="selectSide('RL','Rear Left')">Rear Left</div>
+              <div class="dmg-chip" id="side-RR" onclick="selectSide('RR','Rear Right')">Rear Right</div>
+              <div class="dmg-chip" id="side-CT" onclick="selectSide('CT','Center/Top')">Center/Top</div>
+              <div class="dmg-chip" id="side-UN" onclick="selectSide('UN','Underbody')">Underbody</div>
+            </div>
+          </div>
+          <div>
+            <div style="font-size:11px;font-weight:600;color:var(--c-text-muted);margin-bottom:6px;text-transform:uppercase">Panel</div>
+            <div class="dmg-grid" style="grid-template-columns:1fr 1fr">
+              <div class="dmg-chip" id="panel-QP" onclick="selectPanel('QP','Quarter Panel')">Quarter Panel</div>
+              <div class="dmg-chip" id="panel-DR" onclick="selectPanel('DR','Door')">Door</div>
+              <div class="dmg-chip" id="panel-FD" onclick="selectPanel('FD','Fender')">Fender</div>
+              <div class="dmg-chip" id="panel-HO" onclick="selectPanel('HO','Hood')">Hood</div>
+              <div class="dmg-chip" id="panel-BM" onclick="selectPanel('BM','Bumper')">Bumper</div>
+              <div class="dmg-chip" id="panel-RF" onclick="selectPanel('RF','Roof')">Roof</div>
+              <div class="dmg-chip" id="panel-MR" onclick="selectPanel('MR','Mirror')">Mirror</div>
+              <div class="dmg-chip" id="panel-WS" onclick="selectPanel('WS','Windshield')">Windshield</div>
+            </div>
+          </div>
+        </div>
+        <div id="dmg-loc-preview" style="margin-top:12px;padding:8px 12px;background:var(--c-bg);border-radius:var(--radius);font-size:12px;color:var(--c-text-secondary);display:none">
+          Selected: <strong id="dmg-loc-text"></strong>
+        </div>
+      </div>
+
+      <!-- STEP 2: Damage Type -->
+      <div id="dmg-content-1" style="display:none">
+        <div style="font-size:13px;font-weight:600;margin-bottom:12px">Step 2: Select Damage Type</div>
+        <div style="margin-bottom:12px;font-size:12px;color:var(--c-text-secondary)">Quick templates:</div>
+        <div class="chip-select" style="margin-bottom:16px">
+          <div class="chip" onclick="applyTemplate('scratch')">🔸 Common Scratch</div>
+          <div class="chip" onclick="applyTemplate('dent')">🔷 Common Dent</div>
+          <div class="chip" onclick="applyTemplate('chip')">💥 Paint Chip</div>
+          <div class="chip" onclick="applyTemplate('broken')">🔴 Broken Part</div>
+        </div>
+        <div class="dmg-grid">
+          <div class="dmg-chip" id="type-SC" onclick="selectType('SC','Scratch')">Scratch (SC)</div>
+          <div class="dmg-chip" id="type-DN" onclick="selectType('DN','Dent')">Dent (DN)</div>
+          <div class="dmg-chip" id="type-CP" onclick="selectType('CP','Chip')">Chip (CP)</div>
+          <div class="dmg-chip" id="type-CR" onclick="selectType('CR','Crack')">Crack (CR)</div>
+          <div class="dmg-chip" id="type-BR" onclick="selectType('BR','Broken')">Broken (BR)</div>
+          <div class="dmg-chip" id="type-BN" onclick="selectType('BN','Bent')">Bent (BN)</div>
+          <div class="dmg-chip" id="type-MS" onclick="selectType('MS','Missing')">Missing (MS)</div>
+          <div class="dmg-chip" id="type-OT" onclick="selectType('OT','Other/Unknown')" style="border-color:var(--c-warning)">⚑ Other/Unknown</div>
+        </div>
+        <div id="type-OT-warn" style="display:none;margin-top:8px;padding:8px 10px;background:var(--c-warning-bg);border:1px solid #fde68a;border-radius:var(--radius);font-size:12px;color:var(--c-warning)">
+          ⚠ "Other/Unknown" will be flagged for QA review and counted against coding compliance.
+        </div>
+      </div>
+
+      <!-- STEP 3: Severity -->
+      <div id="dmg-content-2" style="display:none">
+        <div style="font-size:13px;font-weight:600;margin-bottom:12px">Step 3: Select Severity Level</div>
+        <div class="severity-bar" style="margin-bottom:16px">
+          <div class="sev-level sev-1" id="sev-1" onclick="selectSeverity(1)">1<br><span style="font-size:9px">Minimal</span></div>
+          <div class="sev-level sev-2" id="sev-2" onclick="selectSeverity(2)">2<br><span style="font-size:9px">Minor</span></div>
+          <div class="sev-level sev-3" id="sev-3" onclick="selectSeverity(3)">3<br><span style="font-size:9px">Moderate</span></div>
+          <div class="sev-level sev-4" id="sev-4" onclick="selectSeverity(4)">4<br><span style="font-size:9px">Major</span></div>
+          <div class="sev-level sev-5" id="sev-5" onclick="selectSeverity(5)">5<br><span style="font-size:9px">Severe</span></div>
+        </div>
+        <div id="sev-desc" style="padding:10px;background:var(--c-bg);border-radius:var(--radius);font-size:12px;color:var(--c-text-secondary)">
+          Select a severity level above
+        </div>
+        <div style="margin-top:12px">
+          <div style="font-size:12px;font-weight:600;margin-bottom:6px;color:var(--c-text-secondary)">Severity Reference Guide</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:11px">
+            <div style="padding:6px;background:#dcfce7;border-radius:3px"><strong>1:</strong> Cosmetic only, no repair needed</div>
+            <div style="padding:6px;background:#fef9c3;border-radius:3px"><strong>2:</strong> Minor — &lt;2", no paint break</div>
+            <div style="padding:6px;background:#fed7aa;border-radius:3px"><strong>3:</strong> Moderate — visible, paintwork needed</div>
+            <div style="padding:6px;background:#fee2e2;border-radius:3px"><strong>4:</strong> Major — structural or safety concern</div>
+            <div style="padding:6px;background:#fca5a5;border-radius:3px"><strong>5:</strong> Severe — non-drivable / total loss risk</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 4: Details -->
+      <div id="dmg-content-3" style="display:none">
+        <div style="font-size:13px;font-weight:600;margin-bottom:12px">Step 4: Additional Details (Optional)</div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">Approximate Size</label>
+            <input class="form-input" placeholder='e.g. "3 inch diameter"' id="dmg-size">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Direction / Orientation</label>
+            <select class="form-select" id="dmg-direction">
+              <option value="">Select...</option>
+              <option>Inward</option>
+              <option>Outward</option>
+              <option>Horizontal</option>
+              <option>Vertical</option>
+              <option>Diagonal</option>
+              <option>N/A</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Paint Break?</label>
+            <select class="form-select" id="dmg-paint">
+              <option value="">Select...</option>
+              <option>No — paint intact</option>
+              <option>Yes — paint broken</option>
+              <option>Yes — primer exposed</option>
+              <option>Yes — metal exposed</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Pre-existing?</label>
+            <select class="form-select">
+              <option>No — new damage</option>
+              <option>Yes — pre-existing (note)</option>
+              <option>Uncertain</option>
+            </select>
+          </div>
+          <div class="form-group full">
+            <label class="form-label">Notes</label>
+            <textarea class="form-textarea" id="dmg-notes" placeholder="Describe damage in detail..."></textarea>
+          </div>
+        </div>
+        <div class="upload-zone" style="margin-top:12px">
+          📸 Upload damage photo (optional)
+        </div>
+      </div>
+
+      <!-- STEP 5: Review -->
+      <div id="dmg-content-4" style="display:none">
+        <div style="font-size:13px;font-weight:600;margin-bottom:12px">Step 5: Review &amp; Confirm</div>
+        <div id="dmg-review-card" style="background:var(--c-bg);border-radius:var(--radius-lg);padding:16px;margin-bottom:16px">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:12px;margin-bottom:12px">
+            <div><div class="text-muted">Area / Side</div><div style="font-weight:600" id="rv-area">—</div></div>
+            <div><div class="text-muted">Panel</div><div style="font-weight:600" id="rv-panel">—</div></div>
+            <div><div class="text-muted">Damage Type</div><div style="font-weight:600" id="rv-type">—</div></div>
+            <div><div class="text-muted">Severity</div><div style="font-weight:600" id="rv-sev">—</div></div>
+          </div>
+          <div>
+            <div class="aiag-code-label" style="color:var(--c-text-muted);font-size:11px;margin-bottom:4px">AIAG CODE (auto-generated)</div>
+            <div class="aiag-code-preview" id="aiag-code-output">—</div>
+            <div style="font-size:11px;color:var(--c-success);margin-top:4px" id="friendly-desc">—</div>
+          </div>
+          <!-- Completeness meter -->
+          <div style="margin-top:12px">
+            <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:3px"><span style="color:var(--c-text-muted)">Code Completeness</span><span id="completeness-pct" style="font-weight:600;color:var(--c-success)">0%</span></div>
+            <div class="completeness-bar"><div class="completeness-fill" id="completeness-fill" style="width:0%"></div></div>
+          </div>
+        </div>
+        <!-- Dealer-friendly interpretation -->
+        <div style="background:var(--c-accent-light);border:1px solid #bfdbfe;border-radius:var(--radius);padding:10px 12px;font-size:12px;margin-bottom:12px">
+          <div style="font-weight:600;color:var(--c-accent);margin-bottom:2px">Dealer-Friendly Summary</div>
+          <div id="dealer-friendly">Complete all steps to generate summary</div>
+        </div>
+      </div>
+
+    </div>
+    <div class="modal-footer" style="justify-content:space-between">
+      <button class="btn btn-secondary" id="dmg-prev-btn" onclick="dmgPrev()" style="display:none">← Back</button>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-secondary" onclick="closeModal('damage-wizard-modal')">Cancel</button>
+        <button class="btn btn-primary" id="dmg-next-btn" onclick="dmgNext()">Next →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CREATE CLAIM MODAL -->
+<div class="modal-overlay" id="create-claim-modal">
+  <div class="modal modal-lg">
+    <div class="modal-header">
+      <div class="modal-title">Create Claim</div>
+      <button class="modal-close" onclick="closeModal('create-claim-modal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div style="font-size:12px;color:var(--c-text-secondary);margin-bottom:16px">Creating claim from VIN <strong class="mono">1FTFW1ET5EFB22233</strong> · Move <strong class="mono">MVR-11398</strong></div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">VIN <span class="req">*</span></label>
+          <input class="form-input" value="1FTFW1ET5EFB22233">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Move ID</label>
+          <input class="form-input" value="MVR-11398">
+        </div>
+        <div class="form-group full">
+          <label class="form-label">Damage Window — Where did it occur? <span class="req">*</span></label>
+          <div style="background:var(--c-bg);border-radius:var(--radius-lg);padding:12px;border:1px solid var(--c-border)">
+            <div style="font-size:11px;color:var(--c-text-muted);margin-bottom:8px">Select the event window when damage occurred:</div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <label style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;font-size:12px">
+                <input type="radio" name="dmg-window" value="1" style="margin-top:2px">
+                <div><div style="font-weight:600">Pickup → Toledo Yard</div><div style="color:var(--c-text-muted);font-size:11px">Dec 2 – Dec 4 · Carrier: Jack Cooper · Clean at pickup, damage found at yard</div></div>
+              </label>
+              <label style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;font-size:12px">
+                <input type="radio" name="dmg-window" value="2" style="margin-top:2px">
+                <div><div style="font-weight:600">Toledo Yard → Final Delivery</div><div style="color:var(--c-text-muted);font-size:11px">Dec 4 – Dec 10 · Carrier: Allied Transport</div></div>
+              </label>
+              <label style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;font-size:12px">
+                <input type="radio" name="dmg-window" value="3" style="margin-top:2px">
+                <div><div style="font-weight:600">Unknown / Entire Move</div><div style="color:var(--c-text-muted);font-size:11px">Cannot determine window — will require investigation</div></div>
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="form-group full">
+          <label class="form-label">Damage Lines <span class="req">*</span></label>
+          <div style="background:var(--c-bg);border:1px solid var(--c-border);border-radius:var(--radius);padding:10px;margin-bottom:8px;font-size:12px">
+            <div style="display:flex;align-items:center;justify-content:space-between">
+              <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
+                <input type="checkbox" checked>
+                <span><strong>LR Quarter Panel — Dent — Severity 3</strong> <span class="mono text-muted">BD-LR-QP-DN-3</span></span>
+              </label>
+              <span class="badge badge-success">From Inspection</span>
+            </div>
+          </div>
+          <button class="btn btn-secondary btn-sm" onclick="closeModal('create-claim-modal');openModal('damage-wizard-modal')">+ Add Additional Damage Line</button>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Claimed Amount (optional)</label>
+          <input class="form-input" placeholder="$0.00" type="text" value="$1,850.00">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Priority</label>
+          <select class="form-select"><option>Normal</option><option selected>High</option><option>Low</option></select>
+        </div>
+        <div class="form-group full">
+          <label class="form-label">Description / Notes</label>
+          <textarea class="form-textarea" placeholder="Describe the claim and circumstances...">Left rear quarter panel dent found at Toledo Yard delivery inspection. Not present at origin pickup. Carrier Jack Cooper Transport held custody during damage window.</textarea>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('create-claim-modal')">Cancel</button>
+      <button class="btn btn-primary" onclick="closeModal('create-claim-modal');openClaimDetail('CLM-2024-0847')">Submit Claim</button>
+    </div>
+  </div>
+</div>
+
+<!-- EXPORT CLAIM PACKET MODAL -->
+<div class="modal-overlay" id="export-packet-modal">
+  <div class="modal modal-lg">
+    <div class="modal-header">
+      <div class="modal-title">📦 Export Claim Packet — CLM-2024-0847</div>
+      <button class="modal-close" onclick="closeModal('export-packet-modal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div style="font-size:12px;color:var(--c-text-secondary);margin-bottom:16px">One-click warranty routing bundle for OEM claims submission</div>
+      <div class="packet-section">
+        <div class="packet-section-hdr"><span>✓ VIN &amp; Move Summary</span><span class="badge badge-success">Included</span></div>
+        <div class="packet-section-body">1FTFW1ET5EFB22233 · 2024 Ford F-150 Lariat · Move MVR-11398 · Dearborn → Garber Ford Detroit · Jack Cooper Transport</div>
+      </div>
+      <div class="packet-section">
+        <div class="packet-section-hdr"><span>✓ AIAG-Coded Damage Lines</span><span class="badge badge-success">1 line</span></div>
+        <div class="packet-section-body">BD-LR-QP-DN-3 · Left Rear Quarter Panel · Dent · Severity 3 (Moderate) · ~3" diameter · No paint break</div>
+      </div>
+      <div class="packet-section">
+        <div class="packet-section-hdr"><span>✓ Chain-of-Custody Timeline</span><span class="badge badge-success">4 events</span></div>
+        <div class="packet-section-body">Dearborn Pickup → Louisville Ramp → Toledo Yard → Garber Ford Delivery · Full timestamps, locations, responsible parties</div>
+      </div>
+      <div class="packet-section">
+        <div class="packet-section-hdr">
+          <span>📸 Evidence Files</span>
+          <div style="display:flex;align-items:center;gap:8px">
+            <label style="font-size:11px;display:flex;align-items:center;gap:4px"><input type="checkbox" checked> Include photos</label>
+            <span class="badge badge-info">2 files</span>
+          </div>
+        </div>
+        <div class="packet-section-body">damage_LR_quarter_panel.jpg · repair_estimate_garber.pdf ($1,850.00)</div>
+      </div>
+      <div class="packet-section">
+        <div class="packet-section-hdr">
+          <span>📄 POD &amp; Documents</span>
+          <div style="display:flex;align-items:center;gap:8px">
+            <label style="font-size:11px;display:flex;align-items:center;gap:4px"><input type="checkbox" checked> Include POD</label>
+            <span class="badge badge-warning">POD missing</span>
+          </div>
+        </div>
+        <div class="packet-section-body" style="color:var(--c-warning)">⚠ POD for MVR-11398 not yet uploaded. Packet can be generated without it (recommended to request from carrier first).</div>
+      </div>
+      <div class="packet-section">
+        <div class="packet-section-hdr"><span>✓ Claim Decision Summary</span><span class="badge badge-warning">Pending</span></div>
+        <div class="packet-section-body">Decision not yet rendered. Packet will note "pending adjudication."</div>
+      </div>
+      <div style="margin-top:16px;padding:12px;background:var(--c-bg);border-radius:var(--radius);font-size:12px">
+        <div style="font-weight:600;margin-bottom:4px">Output Format</div>
+        <div class="chip-select">
+          <div class="chip selected">PDF Bundle</div>
+          <div class="chip">ZIP (separate files)</div>
+          <div class="chip">JSON (API export)</div>
+        </div>
+      </div>
+      <div style="margin-top:12px;padding:10px 12px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:var(--radius);font-size:12px;color:var(--c-success)">
+        💡 Future: "Send to Warranty System" button will POST this packet to OEM warranty API. Currently manual download.
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('export-packet-modal')">Cancel</button>
+      <button class="btn btn-secondary">📋 Preview Packet</button>
+      <button class="btn btn-primary" onclick="closeModal('export-packet-modal')">⬇ Download Claim Packet</button>
+    </div>
+  </div>
+</div>
+
+<!-- FILTERS MODAL -->
+<div class="modal-overlay" id="filters-modal">
+  <div class="modal" style="max-width:480px">
+    <div class="modal-header">
+      <div class="modal-title">Saved Views</div>
+      <button class="modal-close" onclick="closeModal('filters-modal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="padding:10px 12px;border:1px solid var(--c-border);border-radius:var(--radius);cursor:pointer;display:flex;justify-content:space-between;align-items:center" onclick="closeModal('filters-modal')">
+          <div><div style="font-size:13px;font-weight:600">SLA Breach Risk</div><div style="font-size:11px;color:var(--c-text-muted)">Claims with SLA breach risk this week</div></div>
+          <button class="btn btn-ghost btn-xs">Load</button>
+        </div>
+        <div style="padding:10px 12px;border:1px solid var(--c-border);border-radius:var(--radius);cursor:pointer;display:flex;justify-content:space-between;align-items:center" onclick="closeModal('filters-modal')">
+          <div><div style="font-size:13px;font-weight:600">Jack Cooper Claims</div><div style="font-size:11px;color:var(--c-text-muted)">All open claims for Jack Cooper carrier</div></div>
+          <button class="btn btn-ghost btn-xs">Load</button>
+        </div>
+        <div style="padding:10px 12px;border:1px solid var(--c-border);border-radius:var(--radius);cursor:pointer;display:flex;justify-content:space-between;align-items:center" onclick="closeModal('filters-modal')">
+          <div><div style="font-size:13px;font-weight:600">Garber Ford Active</div><div style="font-size:11px;color:var(--c-text-muted)">Garber Ford Detroit vehicles in transit</div></div>
+          <button class="btn btn-ghost btn-xs">Load</button>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('filters-modal')">Close</button>
+      <button class="btn btn-primary">+ Save Current View</button>
+    </div>
+  </div>
+</div>
+
+<!-- ACCOUNT SWITCHER MODAL -->
+<div class="modal-overlay" id="account-modal">
+  <div class="modal" style="max-width:400px">
+    <div class="modal-header">
+      <div class="modal-title">Account &amp; Profile</div>
+      <button class="modal-close" onclick="closeModal('account-modal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--c-bg);border-radius:var(--radius-lg);margin-bottom:16px">
+        <div style="width:40px;height:40px;border-radius:50%;background:#1a1917;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700" id="am-av">JM</div>
+        <div>
+          <div style="font-size:14px;font-weight:700" id="am-name">Jessica Miller</div>
+          <div style="font-size:12px;color:var(--c-text-secondary)" id="am-role">OEM Admin · Ford Motor Co.</div>
+        </div>
+      </div>
+      <div style="font-size:12px;font-weight:600;color:var(--c-text-muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px">Switch Role (Demo)</div>
+      <div class="role-switch-grid">
+        <div class="role-card" onclick="loginAs('oem_admin');closeModal('account-modal')"><div class="role-card-title" style="color:var(--c-accent)">OEM Admin</div><div class="role-card-desc">Ford Motor Co.</div></div>
+        <div class="role-card" onclick="loginAs('oem_analyst');closeModal('account-modal')"><div class="role-card-title" style="color:var(--c-purple)">OEM Analyst</div><div class="role-card-desc">Claims / Warranty</div></div>
+        <div class="role-card" onclick="loginAs('dealer_admin');closeModal('account-modal')"><div class="role-card-title" style="color:var(--c-success)">Dealer Admin</div><div class="role-card-desc">Garber Ford</div></div>
+        <div class="role-card" onclick="loginAs('internal_ops');closeModal('account-modal')"><div class="role-card-title" style="color:var(--c-warning)">Internal Ops</div><div class="role-card-desc">Backhaul Direct</div></div>
+      </div>
+    </div>
+    <div class="modal-footer" style="justify-content:space-between">
+      <button class="btn btn-ghost btn-sm" style="color:var(--c-danger)" onclick="logout()">Sign Out</button>
+      <button class="btn btn-secondary" onclick="closeModal('account-modal')">Close</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════════
+let currentRole = 'oem_admin';
+let dmgStep = 0;
+let dmgData = {side:'',sideCode:'',panel:'',panelCode:'',type:'',typeCode:'',severity:0};
+
+const ROLES = {
+  oem_admin:   {name:'J. Miller', av:'JM', badge:'OEM Admin',    acct:'Ford Motor Co.',      role:'OEM Admin'},
+  oem_analyst: {name:'L. Chen',   av:'LC', badge:'Claims Analyst',acct:'Ford Motor Co.',      role:'OEM Claims Analyst'},
+  dealer_admin:{name:'M. Torres', av:'MT', badge:'Dealer Admin',  acct:'Garber Ford Detroit', role:'Dealer Admin'},
+  internal_ops:{name:'S. Kim',    av:'SK', badge:'Internal Ops',  acct:'All Accounts',        role:'Internal Ops Admin'},
+};
+
+const SEV_DESCS = {
+  1:'Severity 1 — Minimal: cosmetic only, no repair required',
+  2:'Severity 2 — Minor: small mark (<2"), no paint break',
+  3:'Severity 3 — Moderate: visible, requires paintwork',
+  4:'Severity 4 — Major: structural concern or safety issue',
+  5:'Severity 5 — Severe: non-drivable, possible total loss',
+};
+
+// ═══════════════════════════════════════════════
+//  LOGIN / ROLE
+// ═══════════════════════════════════════════════
+function loginAs(role) {
+  currentRole = role;
+  const r = ROLES[role];
+  document.getElementById('login-page').style.display = 'none';
+  document.getElementById('app').style.display = 'flex';
+  document.getElementById('tb-user-av').textContent = r.av;
+  document.getElementById('tb-user-name').textContent = r.name;
+  document.getElementById('tb-role-badge').textContent = r.badge;
+  document.getElementById('sb-acct-name').innerHTML = r.acct + ' <span>⌄</span>';
+  document.getElementById('sb-acct-role').textContent = r.role;
+  document.getElementById('am-av').textContent = r.av;
+  document.getElementById('am-name').textContent = r.name;
+  document.getElementById('am-role').textContent = r.role + ' · ' + r.acct;
+
+  // Adjust dashboard for dealer
+  const isDealer = role === 'dealer_admin';
+  document.getElementById('oem-kpis').style.display = isDealer ? 'none' : '';
+  document.getElementById('dealer-kpis').style.display = isDealer ? '' : 'none';
+  document.getElementById('dealer-dash-banner').style.display = isDealer ? '' : 'none';
+  document.getElementById('dash-title').textContent = isDealer ? 'Dashboard — Garber Ford Detroit' : 'OEM Dashboard — Ford Motor Co.';
+  document.getElementById('claims-role-label').textContent = isDealer ? 'Dealer view' : 'OEM / Internal view';
+  nav('dashboard');
+}
+
+function logout() {
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('login-page').style.display = 'flex';
+  closeAllModals();
+}
+
+function switchAccount(name, role) {
+  document.getElementById('sb-acct-name').innerHTML = name + ' <span>⌄</span>';
+  document.getElementById('sb-acct-role').textContent = role;
+  document.getElementById('account-switcher').classList.remove('open');
+}
+
+// ═══════════════════════════════════════════════
+//  NAVIGATION
+// ═══════════════════════════════════════════════
+function nav(page) {
+  // Hide all pages
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  // Show target page
+  const target = document.getElementById('page-' + page);
+  if (target) target.classList.add('active');
+  // Update nav highlights
+  document.querySelectorAll('.sb-nav-item').forEach(i => i.classList.remove('active'));
+  document.querySelectorAll('.sb-nav-item').forEach(i => {
+    if (i.getAttribute('onclick') && i.getAttribute('onclick').includes("'"+page+"'")) {
+      i.classList.add('active');
+    }
+  });
+  // Close any open dropdown
+  document.getElementById('account-switcher').classList.remove('open');
+  document.getElementById('search-dropdown').classList.remove('open');
+}
+
+function openVinDetail(vin) {
+  document.getElementById('vin-detail-vin').textContent = vin;
+  document.getElementById('vin-detail-vin2').textContent = vin;
+  const title = vin === '1FTFW1ET5EFA12345' ? '2024 Ford F-150 XLT' : '2024 Ford F-150 Lariat';
+  document.getElementById('vin-detail-title').textContent = title;
+  nav('vin-detail');
+}
+
+function openClaimDetail(claimId) {
+  document.getElementById('claim-detail-id').textContent = claimId;
+  document.getElementById('claim-detail-title').textContent = claimId;
+  nav('claim-detail');
+}
+
+function openMoveDetail(moveId) {
+  nav('moves');
+}
+
+// ═══════════════════════════════════════════════
+//  TABS
+// ═══════════════════════════════════════════════
+function switchTab(tabBarId, contentPrefix, idx) {
+  const bar = document.getElementById(tabBarId);
+  bar.querySelectorAll('.tab-item').forEach((t, i) => {
+    t.classList.toggle('active', i === idx);
+  });
+  // Find all tab-content with this prefix
+  let i = 0;
+  while (true) {
+    const el = document.getElementById(contentPrefix + i);
+    if (!el) break;
+    el.classList.toggle('active', i === idx);
+    i++;
+  }
+}
+
+// ═══════════════════════════════════════════════
+//  MODALS
+// ═══════════════════════════════════════════════
+function openModal(id) {
+  document.getElementById(id).classList.add('open');
+}
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+}
+function closeAllModals() {
+  document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('open'));
+}
+// Close on overlay click
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+  overlay.addEventListener('click', function(e) {
+    if (e.target === this) this.classList.remove('open');
+  });
+});
+
+// ═══════════════════════════════════════════════
+//  SEARCH
+// ═══════════════════════════════════════════════
+function openSearch() {
+  document.getElementById('search-dropdown').classList.add('open');
+}
+function filterSearch(val) {
+  if (val.length > 0) {
+    document.getElementById('search-dropdown').classList.add('open');
+  }
+}
+document.addEventListener('click', e => {
+  if (!e.target.closest('.tb-search')) {
+    document.getElementById('search-dropdown').classList.remove('open');
+  }
+  if (!e.target.closest('#sb-account') && !e.target.closest('.sb-account')) {
+    // keep switcher open on click of switcher itself
+  }
+});
+
+// ═══════════════════════════════════════════════
+//  ACCOUNT SWITCHER
+// ═══════════════════════════════════════════════
+function toggleAccountSwitcher() {
+  document.getElementById('account-switcher').classList.toggle('open');
+}
+
+// ═══════════════════════════════════════════════
+//  CLAIMS FILTER
+// ═══════════════════════════════════════════════
+function filterClaimsBy(status) {
+  // Just navigate to claims for now
+  nav('claims');
+}
+
+// ═══════════════════════════════════════════════
+//  INSPECTION DAMAGE STATUS
+// ═══════════════════════════════════════════════
+function selectDamageStatus(status) {
+  document.getElementById('no-dmg-btn').style.borderColor = status === 'none' ? 'var(--c-success)' : 'var(--c-border)';
+  document.getElementById('no-dmg-btn').style.background = status === 'none' ? 'var(--c-success-bg)' : '';
+  document.getElementById('dmg-btn').style.borderColor = status === 'damage' ? 'var(--c-danger)' : 'var(--c-border)';
+}
+
+// ═══════════════════════════════════════════════
+//  DAMAGE WIZARD
+// ═══════════════════════════════════════════════
+function goDmgStep(step) {
+  dmgStep = step;
+  for (let i = 0; i <= 4; i++) {
+    document.getElementById('dmg-content-' + i).style.display = i === step ? '' : 'none';
+    const sEl = document.getElementById('dmg-step-' + i);
+    sEl.classList.remove('active','done');
+    if (i < step) sEl.classList.add('done');
+    else if (i === step) sEl.classList.add('active');
+  }
+  document.getElementById('dmg-prev-btn').style.display = step > 0 ? '' : 'none';
+  document.getElementById('dmg-next-btn').textContent = step === 4 ? '✓ Add Damage Line' : 'Next →';
+  if (step === 4) updateReview();
+}
+
+function dmgNext() {
+  if (dmgStep < 4) goDmgStep(dmgStep + 1);
+  else {
+    // Save damage line
+    closeModal('damage-wizard-modal');
+    dmgData = {side:'',sideCode:'',panel:'',panelCode:'',type:'',typeCode:'',severity:0};
+    dmgStep = 0;
+    goDmgStep(0);
+    clearDmgSelections();
+  }
+}
+
+function dmgPrev() {
+  if (dmgStep > 0) goDmgStep(dmgStep - 1);
+}
+
+function clearDmgSelections() {
+  document.querySelectorAll('.dmg-chip').forEach(c => c.classList.remove('selected'));
+  document.querySelectorAll('.sev-level').forEach(s => s.classList.remove('selected'));
+  document.querySelectorAll('.veh-zone').forEach(z => z.classList.remove('selected'));
+}
+
+function selectZone(code, label) {
+  document.querySelectorAll('.veh-zone').forEach(z => z.classList.remove('selected'));
+  document.getElementById('zone-' + code.toLowerCase())?.classList.add('selected');
+  dmgData.sideCode = code;
+  dmgData.side = label;
+  showLocPreview();
+}
+
+function selectSide(code, label) {
+  document.querySelectorAll('[id^="side-"]').forEach(c => c.classList.remove('selected'));
+  document.getElementById('side-' + code)?.classList.add('selected');
+  dmgData.sideCode = code;
+  dmgData.side = label;
+  showLocPreview();
+}
+
+function selectPanel(code, label) {
+  document.querySelectorAll('[id^="panel-"]').forEach(c => c.classList.remove('selected'));
+  document.getElementById('panel-' + code)?.classList.add('selected');
+  dmgData.panelCode = code;
+  dmgData.panel = label;
+  showLocPreview();
+}
+
+function showLocPreview() {
+  const el = document.getElementById('dmg-loc-preview');
+  const txt = document.getElementById('dmg-loc-text');
+  if (dmgData.side || dmgData.panel) {
+    el.style.display = '';
+    txt.textContent = [dmgData.side, dmgData.panel].filter(Boolean).join(' · ');
+  }
+}
+
+function selectType(code, label) {
+  document.querySelectorAll('[id^="type-"]').forEach(c => c.classList.remove('selected'));
+  document.getElementById('type-' + code)?.classList.add('selected');
+  dmgData.typeCode = code;
+  dmgData.type = label;
+  document.getElementById('type-OT-warn').style.display = code === 'OT' ? '' : 'none';
+}
+
+function applyTemplate(tpl) {
+  const map = {scratch:['SC','Scratch'],dent:['DN','Dent'],chip:['CP','Chip'],broken:['BR','Broken']};
+  if (map[tpl]) selectType(map[tpl][0], map[tpl][1]);
+}
+
+function selectSeverity(n) {
+  document.querySelectorAll('.sev-level').forEach(s => s.classList.remove('selected'));
+  document.getElementById('sev-'+n)?.classList.add('selected');
+  dmgData.severity = n;
+  document.getElementById('sev-desc').textContent = SEV_DESCS[n] || '';
+}
+
+function updateReview() {
+  const loc = [dmgData.side || '—', dmgData.panel || '—'];
+  document.getElementById('rv-area').textContent = dmgData.side || '—';
+  document.getElementById('rv-panel').textContent = dmgData.panel || '—';
+  document.getElementById('rv-type').textContent = dmgData.type || '—';
+  document.getElementById('rv-sev').textContent = dmgData.severity ? `${dmgData.severity} — ${['Minimal','Minor','Moderate','Major','Severe'][dmgData.severity-1]}` : '—';
+  
+  // Generate AIAG code: BD-{SideCode}-{PanelCode}-{TypeCode}-{Severity}
+  const parts = ['BD', dmgData.sideCode||'??', dmgData.panelCode||'??', dmgData.typeCode||'??', dmgData.severity||'?'];
+  const code = parts.join('-');
+  document.getElementById('aiag-code-output').textContent = code;
+  
+  // Friendly desc
+  const friendlyParts = [dmgData.side, dmgData.panel, dmgData.type?.toLowerCase(), dmgData.severity ? `— ${['minimal','minor','moderate','major','severe'][dmgData.severity-1]}` : ''].filter(Boolean);
+  const friendly = friendlyParts.join(' ');
+  document.getElementById('friendly-desc').textContent = friendly || '—';
+  document.getElementById('dealer-friendly').textContent = friendly || 'Complete steps to generate summary';
+  
+  // Completeness
+  const filled = [dmgData.sideCode, dmgData.panelCode, dmgData.typeCode, dmgData.severity].filter(Boolean).length;
+  const pct = Math.round(filled / 4 * 100);
+  document.getElementById('completeness-pct').textContent = pct + '%';
+  document.getElementById('completeness-fill').style.width = pct + '%';
+  document.getElementById('completeness-fill').style.background = pct >= 75 ? 'var(--c-success)' : pct >= 50 ? 'var(--c-warning)' : 'var(--c-danger)';
+}
+
+// ═══════════════════════════════════════════════
+//  KEYBOARD SHORTCUTS
+// ═══════════════════════════════════════════════
+document.addEventListener('keydown', e => {
+  if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+    e.preventDefault();
+    document.getElementById('global-search').focus();
+    openSearch();
+  }
+  if (e.key === 'Escape') {
+    closeAllModals();
+    document.getElementById('search-dropdown').classList.remove('open');
+    document.getElementById('account-switcher').classList.remove('open');
+  }
+});
+
+// ═══════════════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════════════
+// Show login page by default (already shown via CSS/HTML)
+</script>
+</body>
+</html>
